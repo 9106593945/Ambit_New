@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Navrang.Billing.AppCore\Navrang.Billing.AppCore.csproj" />
+    <ProjectReference Include="..\Navrang.Billing.Infrastructure\Navrang.Billing.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

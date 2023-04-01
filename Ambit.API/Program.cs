@@ -1,5 +1,10 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Navrang.Billing.AppCore.Common;
+using Navrang.Billing.AppCore.Models;
+using Navrang.Billing.Infrastructure.Persistence;
+using Navrang.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,11 +40,21 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 				   //options.Authority = "http://localhost";
 				   options.RequireHttpsMetadata = false;
 			   });
+builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<IDapper, Dapperr>();
+builder.Services.AddScoped<IRepoSupervisor, RepoSupervisor>();
+
+builder.Services.AddTransient<IUserService,userService>();
+builder.Services.AddTransient<IRepoSupervisor, RepoSupervisor>();
+builder.Services.AddTransient<IitemService, itemService>();
+builder.Services.AddTransient<IBannerService, BannerService>();
+builder.Services.AddTransient<ICartService, CartService>();
 
 var app = builder.Build();
 
