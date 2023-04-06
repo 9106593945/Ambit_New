@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Navrang.Billing.AppCore.Common;
-using Navrang.Billing.AppCore.EntityModels;
-using Navrang.Billing.AppCore.Models;
+using Ambit.AppCore.Common;
+using Ambit.AppCore.EntityModels;
+using Ambit.AppCore.Models;
 using Ambit.API.Helpers;
 using System;
 using System.Collections.Generic;

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Navrang.Billing.AppCore.Models;
+using Ambit.AppCore.Models;
 
 namespace Ambit.API.Controllers
 {

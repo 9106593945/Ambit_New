@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
-using Navrang.Billing.AppCore.EntityModels;
-using Navrang.Billing.AppCore.Common;
+using Ambit.AppCore.EntityModels;
+using Ambit.AppCore.Common;
 using Ambit.API.Helpers;
 
 namespace Navrang.Services

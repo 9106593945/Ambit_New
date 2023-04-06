@@ -10,12 +10,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.21.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Navrang.Billing.AppCore\Navrang.Billing.AppCore.csproj" />
-    <ProjectReference Include="..\Navrang.Billing.Infrastructure\Navrang.Billing.Infrastructure.csproj" />
+    <ProjectReference Include="..\Ambit.AppCore\Ambit.AppCore.csproj" />
+    <ProjectReference Include="..\Ambit.Infrastructure\Ambit.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

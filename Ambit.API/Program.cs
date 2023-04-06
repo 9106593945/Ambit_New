@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Navrang.Billing.AppCore.Common;
-using Navrang.Billing.AppCore.Models;
-using Navrang.Billing.Infrastructure.Persistence;
+using Ambit.AppCore.Common;
+using Ambit.AppCore.Models;
+using Ambit.Infrastructure.Persistence;
 using Navrang.Services;
 using System.Text;
 
