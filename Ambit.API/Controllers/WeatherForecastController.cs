@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ambit.API.Controllers
 {
-	[ApiController]
+    [ApiController]
 	[Route("[controller]")]
 	public class WeatherForecastController : ControllerBase
 	{

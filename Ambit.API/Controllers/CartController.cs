@@ -1,12 +1,12 @@
 ﻿using Ambit.API.Helpers;
+using Ambit.AppCore.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Ambit.AppCore.Models;
 
 namespace Ambit.API.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	[Authorize]
 	public class CartController : ControllerBase

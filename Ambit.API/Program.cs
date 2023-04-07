@@ -6,6 +6,8 @@ using Ambit.AppCore.Models;
 using Ambit.Infrastructure.Persistence;
 using Navrang.Services;
 using System.Text;
+using Ambit.API.Helpers;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration; // allows both to access and to set up the config
@@ -42,6 +44,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 			   });
 builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+
+var appSettingsSection = configuration.GetSection("appSettings");
+builder.Services.Configure<AppSettings>(appSettingsSection);
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -49,6 +55,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IDapper, Dapperr>();
 builder.Services.AddScoped<IRepoSupervisor, RepoSupervisor>();
+
 
 builder.Services.AddTransient<IUserService,userService>();
 builder.Services.AddTransient<IRepoSupervisor, RepoSupervisor>();

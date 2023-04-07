@@ -1,12 +1,12 @@
 ﻿using Ambit.API.Helpers;
+using Ambit.AppCore.Common;
+using Ambit.AppCore.EntityModels;
+using Ambit.AppCore.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Ambit.AppCore.Common;
-using Ambit.AppCore.EntityModels;
-using Ambit.AppCore.Models;
 using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,7 +14,7 @@ using System.Text;
 
 namespace Ambit.API.Controllers
 {
-	[ApiController]
+    [ApiController]
 	[Route("[controller]")]
 	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class APIController : ControllerBase
@@ -132,10 +132,10 @@ namespace Ambit.API.Controllers
 				else
 				{
 					var customer = _userService.GetCustomerByUserName(registerRequest.username);
-					if (customer != null && customer.Id > 0)
-					{
-						registerRequest.customerId = customer.Id;
-					}
+					//if (customer != null && customer.Id > 0)
+					//{
+					//	registerRequest.customerId = customer.Id;
+					//}
 					var customerReg = _userService.RegisterCustomerLogin(registerRequest);
 					if (customerReg)
 					{
@@ -157,63 +157,6 @@ namespace Ambit.API.Controllers
 			}
 		}
 
-
-		[Route("GetAllFavorite")]
-		[HttpPost]
-		public IActionResult GetAllFavorite([FromForm] int customerId, [FromForm] int customerLoginId)
-		{
-			IEnumerable<ItemEntityModel> favoriteItems = _itemService.GetAllFavoriteItem(customerLoginId);
-			var response = new List<ItemAPIEntityModel>();
-			response = favoriteItems.Select(s => new ItemAPIEntityModel()
-			{
-				Code = s.Code,
-				Image = s.Image,
-				ImagePath = s.ImagePath,
-				Description = s.Description,
-				FavoriteItemId = s.favoriteitemId,
-				ItemId = s.ItemId,
-				Name = s.Name,
-				IsFavorite = s.IsFavorite,
-				SellAmount = s.SellAmount
-			}).ToList();
-
-			return Ok(response);
-		}
-
-		[Route("ClearAllFavorite")]
-		[HttpPost]
-		public IActionResult ClearAllFavorite([FromForm] int customerId, [FromForm] int customerLoginId)
-		{
-			bool favoriteItems = _itemService.ClearAllFavorite(customerLoginId);
-			return Ok(new JObject { { "message", "Favorite Items clear successfully." } });
-		}
-
-		[Route("UpsertFavoriteItem")]
-		[HttpPost]
-		public IActionResult UpsertFavoriteItem([FromForm] int itemId, [FromForm] int customerId, [FromForm] int customerLoginId, [FromForm] bool isFavorite)
-		{
-			bool favoriteItem = _itemService.UpsertFavoriteItem(customerLoginId, itemId, isFavorite);
-			if (favoriteItem)
-			{
-				IEnumerable<ItemAPIEntityModel> favoriteItems = _itemService.GetAllFavoriteItem(customerLoginId)
-					.Select(s => new ItemAPIEntityModel()
-					{
-						Code = s.Code,
-						Image = s.Image,
-						ImagePath = s.ImagePath,
-						Description = s.Description,
-						FavoriteItemId = s.favoriteitemId,
-						ItemId = s.ItemId,
-						Name = s.Name,
-						IsFavorite = s.IsFavorite,
-						SellAmount = s.SellAmount
-					});
-
-				return Ok(favoriteItems);
-			}
-
-			return BadRequest();
-		}
 
 		[Route("Banners")]
 		[HttpGet]

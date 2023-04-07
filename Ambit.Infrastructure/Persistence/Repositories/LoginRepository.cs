@@ -77,7 +77,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
                     name = registerRequest.name,
                     username = registerRequest.username,
                     password = registerRequest.password,
-                    customerid = registerRequest.customerId
+                    //customerid = registerRequest.customerId
                });
 
                return CustomerLogin;
