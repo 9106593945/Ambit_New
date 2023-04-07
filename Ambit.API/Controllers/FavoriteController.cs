@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Ambit.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
 	[ApiController]
 	[Authorize]
 	public class FavoriteController : ControllerBase
@@ -62,15 +62,19 @@ namespace Ambit.API.Controllers
             bool favoriteItems = _itemService.ClearAllFavorite(customerLoginId);
             return Ok(new JObject { { "message", "Favorite Items clear successfully." } });
         }
-
+        [HttpPost]
+        public IActionResult Test([FromForm] FavoriteItemRequestModel favoriteItemRequestModel)
+        {
+            return Ok(new JObject { { "message", "Favorite Items clear successfully." } });
+        }
         [Route("UpsertFavoriteItem")]
         [HttpPost]
-        public IActionResult UpsertFavoriteItem([FromForm] int itemId, [FromForm] int customerId, [FromForm] int customerLoginId, [FromForm] bool isFavorite)
+        public IActionResult UpsertFavoriteItem([FromForm] FavoriteItemRequestModel favoriteItemRequestModel)
         {
-            bool favoriteItem = _itemService.UpsertFavoriteItem(customerLoginId, itemId, isFavorite);
+            bool favoriteItem = _itemService.UpsertFavoriteItem(favoriteItemRequestModel.customerLoginId, favoriteItemRequestModel.itemId, favoriteItemRequestModel.isFavorite);
             if (favoriteItem)
             {
-                IEnumerable<ItemAPIEntityModel> favoriteItems = _itemService.GetAllFavoriteItem(customerLoginId)
+                IEnumerable<ItemAPIEntityModel> favoriteItems = _itemService.GetAllFavoriteItem(favoriteItemRequestModel.customerLoginId)
                     .Select(s => new ItemAPIEntityModel()
                     {
                         Code = s.Code,
