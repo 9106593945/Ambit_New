@@ -1,16 +1,15 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using Ambit.API.Helpers;
 using Ambit.AppCore.Common;
 using Ambit.AppCore.Models;
 using Ambit.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Navrang.Services;
 using System.Text;
-using Ambit.API.Helpers;
-using Microsoft.Extensions.Configuration;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
+string MyAllowSpecificOrigins = "MyPolicy";
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration; // allows both to access and to set up the config
 IWebHostEnvironment environment = builder.Environment;
@@ -18,19 +17,18 @@ IWebHostEnvironment environment = builder.Environment;
 //{
 //	options.IdleTimeout = TimeSpan.FromMinutes(60);
 //});
-
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy(name: MyAllowSpecificOrigins,
+				   builder =>
+				   {
+					   builder.AllowAnyOrigin()
+						.AllowAnyMethod()
+						.AllowAnyHeader();
+				   });
+});
 // Add services to the container.
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-				.AddCookie(options =>
-				{
-					options.Cookie.Name = "Authenticate";
-					options.LoginPath = "/Login";
-					options.LogoutPath = "/Logout";
-					options.AccessDeniedPath = "/AccessDenied";
-					options.SlidingExpiration = false;
-					options.ReturnUrlParameter = "from";
-					//options.Cookie.SameSite = SameSiteMode.None;
-				})
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			   .AddJwtBearer(options =>
 			   {
 				   options.TokenValidationParameters = new TokenValidationParameters
@@ -45,8 +43,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 				   options.RequireHttpsMetadata = false;
 			   });
 builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
-
 var appSettingsSection = configuration.GetSection("appSettings");
 builder.Services.Configure<AppSettings>(appSettingsSection);
 
@@ -73,7 +69,6 @@ builder.Services.AddSwaggerGen(setup =>
 	};
 
 	setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-
 	setup.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
 	   { jwtSecurityScheme, Array.Empty<string>() }
@@ -85,7 +80,7 @@ builder.Services.AddScoped<IDapper, Dapperr>();
 builder.Services.AddScoped<IRepoSupervisor, RepoSupervisor>();
 
 
-builder.Services.AddTransient<IUserService,userService>();
+builder.Services.AddTransient<IUserService, userService>();
 builder.Services.AddTransient<IRepoSupervisor, RepoSupervisor>();
 builder.Services.AddTransient<IitemService, itemService>();
 builder.Services.AddTransient<IBannerService, BannerService>();
@@ -102,6 +97,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(MyAllowSpecificOrigins);
 //Add User session
 //app.UseSession();
 app.UseAuthentication();
