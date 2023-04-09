@@ -85,7 +85,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
           public UserApiModel GetCustomerByUserName(string userName)
           {
-               var login = _dbContext.Customer.Where(x => x.mobile == userName).FirstOrDefault();
+               var login = _dbContext.Customer.Where(x => x.Name == userName).FirstOrDefault();
                if (login == null)
                     return null;
 

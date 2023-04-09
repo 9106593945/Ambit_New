@@ -20,9 +20,9 @@ namespace Navrang.Services
 			_repoSupervisor = repoSupervisor;
 		}
 
-		public IEnumerable<ItemEntityModel> GetAllItems()
+		public IEnumerable<ItemEntityModel> GetAllItems(int categoryid, int customerid, int customerLoginId)
 		{
-			return _repoSupervisor.Items.GetAllItems();
+			return _repoSupervisor.Items.GetAllItems(categoryid, customerid, customerLoginId);
 		}
 
 		public IEnumerable<ItemEntityModel> GetAllItemsBySearchCrieteria(JDatatableParameters searchParams, out int TotalCount)
@@ -97,5 +97,16 @@ namespace Navrang.Services
 		{
 			return _repoSupervisor.Items.GetItemsByKey(key);
 		}
-	}
+
+
+        public IEnumerable<CategoryEntityModel> GetAllCategory()
+        {
+            var favoriteItems = _repoSupervisor.Items.GetAllCategory();
+            favoriteItems = favoriteItems
+                        .Select(c => { c.ImagePath = _appSettings.SiteUrl + "/images/items/resize/" + c.Image; return c; })
+                        .Where(a => a.Active == true)
+                        .ToList();
+            return favoriteItems;
+        }
+    }
 }
