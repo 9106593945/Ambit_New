@@ -17,6 +17,7 @@ namespace Ambit.AppCore.EntityModels
 		public bool isApproved { get; set; }
 		public string deviceId { get; set; }
 		public long? customerId { get; set; }
+		public string invitationcode { get; set; }
 
 	}
 }

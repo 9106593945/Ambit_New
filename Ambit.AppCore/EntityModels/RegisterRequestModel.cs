@@ -12,6 +12,8 @@ namespace Ambit.AppCore.EntityModels
 		public string deviceId { get; set; }
 		[Required(ErrorMessage = "Please enter User Name")]
 		public string username { get; set; }
+		public string invitationcode { get; set; }
+		public string type { get; set; }
 		//public long customerId { get; set; }
 	}
 }

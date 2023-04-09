@@ -13,5 +13,7 @@ namespace Ambit.Domain.Entities
 		public string password { get; set; }
 		public string deviceid { get; set; }
 		public bool isapproved { get; set; }
+		public string invitationcode { get; set; }
+		public string type { get; set; }
 	}
 }
