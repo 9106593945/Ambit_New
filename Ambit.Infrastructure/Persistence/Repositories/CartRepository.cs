@@ -309,12 +309,20 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 		}
         public int IsCartExist(int customerloginid)
         {
-            var Cart = _dbContext.Cart.FirstOrDefault(i => i.customerloginid == customerloginid);
-            if (Cart != null)
-            {
-                return Convert.ToInt32(Cart.cartid);
+			try
+			{
+                var Cart = _dbContext.Cart.Where(i => i.customerloginid == customerloginid).FirstOrDefault().cartid;
+                if (Cart != null)
+                {
+                    return Convert.ToInt32(Cart);
+                }
+                return 0;
             }
-            return 0;
+			catch (Exception ex)
+			{
+				throw;
+			}
+            
         }
 
     }

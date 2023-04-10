@@ -6,14 +6,13 @@ namespace Ambit.Domain.Entities
 {
 	public class cart : BaseEntity
 	{
-		[Key]
 		public int cartid { get; set; }
 		public string customername { get; set; }
 		public bool Active { get; set; }
 		public bool isDeleted { get; set; }
-		public string Created_On { get; set; }
+		public DateTime? Created_On { get; set; }
 		public int Created_By { get; set; }
-		public string Updated_On { get; set; }
+		public DateTime? Updated_On { get; set; }
 		public int Updated_By { get; set; }
 		public int customerloginid { get; set; }
 
