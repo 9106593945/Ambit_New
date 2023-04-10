@@ -23,7 +23,8 @@ namespace Ambit.AppCore.Repositories
 		bool DeleteCartItems(long id);
 		bool DeleteCartItemsByCartId(long id);
 		bool DeleteCartItemsByCartItemId(long id);
-		List<CartItemEntityModel> getCustomerCartDetailsById(long customerId);
+		List<CartItemEntityModel> getCustomerCartDetailsById(int customerloginid);
 		decimal getCustomerTotalAmountById(long customerId);
-	}
+        int IsCartExist(int customerloginid);
+    }
 }
