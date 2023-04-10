@@ -85,19 +85,16 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 		{
 			var Cart = _dbContext.Cart.Add(new cart
 			{
-				//cartnumber = CartEntity.Cart_Number,
-				//customername = CartEntity.Customer_Name,
-				//customerid = CartEntity.CustomerId,
-				//address = CartEntity.Address,
-				//description = CartEntity.Description,
-				//cartdate = CartEntity.Cart_Date,
-				//total_amount = CartEntity.Total_Amount,
-				//extra = CartEntity.Extra,
-				//discount = CartEntity.Discount,
-				//amount = CartEntity.SubTotal,
-				//shippingcharge = CartEntity.ShippingCharge,
-				//taxpercent = CartEntity.TaxPercent,
-				//taxamount = CartEntity.TaxAmount
+				cartid = CartEntity.cartid,
+				Active = CartEntity.Active,
+				isDeleted = CartEntity.isDeleted,
+				Created_On = CartEntity.Created_On,
+				Created_By = CartEntity.Created_By,
+				Updated_On = CartEntity.Updated_On,
+				Updated_By = CartEntity.Updated_By,
+				customerloginid = CartEntity.customerloginid,
+				customername = "",
+
 			});
 
 
@@ -108,13 +105,16 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 		{
 			var CartItems = _dbContext.CartItems.Add(new cartitems
 			{
-				//itemid = CartItem.ItemId,
-				//cartid = CartItem.CartId,
-				//image = CartItem.Image,
-				//quantity = CartItem.Quantity,
-				//name = CartItem.Name,
-				//price = CartItem.SellingPrice,
-				//totalamount = CartItem.Amount
+				itemid = CartItem.itemid,
+				cartid = CartItem.cartid,
+				quantity = CartItem.quantity,
+				Active = CartItem.Active,
+                isDeleted = CartItem.isDeleted,
+                Created_On = CartItem.Created_On,
+                Created_By = CartItem.Created_By,
+                Updated_On = CartItem.Updated_On,
+                Updated_By = CartItem.Updated_By,
+                customerloginid = CartItem.customerloginid,
 			});
 
 			return CartItems;
@@ -311,10 +311,10 @@ namespace Ambit.Infrastructure.Persistence.Repositories
         {
 			try
 			{
-                var Cart = _dbContext.Cart.Where(i => i.customerloginid == customerloginid).FirstOrDefault().cartid;
-                if (Cart != null)
+                var Cart = _dbContext.Cart.Where(i => i.customerloginid == customerloginid);
+                if (Cart != null && Cart.Count() > 0)
                 {
-                    return Convert.ToInt32(Cart);
+                    return Convert.ToInt32(Cart.FirstOrDefault().cartid);
                 }
                 return 0;
             }
