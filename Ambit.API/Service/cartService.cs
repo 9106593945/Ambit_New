@@ -321,7 +321,8 @@ namespace Navrang.Services
 						customerloginid = cartItemEntityModel.customerloginid
 					};
                     var cart = _repoSupervisor.Cart.AddNewCart(cartEntityModel);
-					if (cart != null)
+                    _repoSupervisor.Complete();
+                    if (cart != null)
 						cartItemEntityModel.cartid = cart.Entity.cartid;
                     var CartItems = _repoSupervisor.Cart.AddCartItems(cartItemEntityModel);
                     if (CartItems != null)

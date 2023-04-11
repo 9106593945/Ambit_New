@@ -85,7 +85,6 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 		{
 			var Cart = _dbContext.Cart.Add(new cart
 			{
-				cartid = CartEntity.cartid,
 				Active = CartEntity.Active,
 				isDeleted = CartEntity.isDeleted,
 				Created_On = CartEntity.Created_On,
@@ -199,7 +198,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public bool DeleteCartItemsByCartId(long id)
 		{
-			var Cart = _dbContext.CartItems.Where(i => i.cartid == id && i.isDeleted == false);
+			var Cart = _dbContext.CartItems.Where(i => i.id == id && i.isDeleted == false);
 			if (Cart != null)
 			{
 				Cart.ToList().ForEach(c => c.isDeleted = true);
@@ -284,20 +283,29 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public List<CartItemEntityModel> getCustomerCartDetailsById(int customerloginid)
 		{
-			IQueryable<CartItemEntityModel> CustomerCarts = from st in _dbContext.CartItems
-												   join s in _dbContext.Cart on st.cartid equals s.cartid
-												   join i in _dbContext.Items on st.itemid equals i.itemid
-												   where s.isDeleted == false && st.isDeleted == false && i.isDeleted == false && st.customerloginid == customerloginid
-                                                            select new CartItemEntityModel
-												   {
-																Active = st.Active,
-                                                                cartid = st.cartid,
-																itemid = st.itemid,
-                                                                quantity = st.quantity,
-                                                                isDeleted = st.isDeleted,
-                                                                Created_On = st.Created_On
-                                                            };
-			return CustomerCarts.ToList();
+			try
+			{
+                IQueryable<CartItemEntityModel> CustomerCarts = from st in _dbContext.CartItems
+                                                                join s in _dbContext.Cart on st.cartid equals s.cartid
+                                                                where s.isDeleted == false && st.isDeleted == false && st.customerloginid == customerloginid
+                                                                select new CartItemEntityModel
+                                                                {
+                                                                    Active = st.Active,
+                                                                    cartid = st.cartid,
+                                                                    itemid = st.itemid,
+                                                                    quantity = st.quantity,
+                                                                    isDeleted = st.isDeleted,
+                                                                    Created_On = st.Created_On,
+																	id = st.id
+                                                                };
+                return CustomerCarts.ToList();
+            }
+			catch (Exception ex)
+			{
+
+				throw;
+			}
+			
 		}
 
 		public decimal getCustomerTotalAmountById(long customerId)
