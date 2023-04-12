@@ -204,7 +204,7 @@ namespace Navrang.Services
 
 		public bool DeleteCart(long id)
 		{
-			_repoSupervisor.Cart.DeleteCartItemsByCartId(id);
+			_repoSupervisor.Cart.DeleteCartItems(id);
 			//if (_repoSupervisor.Cart.DeleteCart(id))
 			//{
 				_repoSupervisor.Complete();
