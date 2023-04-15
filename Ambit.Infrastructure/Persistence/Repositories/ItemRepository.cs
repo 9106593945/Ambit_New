@@ -351,17 +351,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
             throw new NotImplementedException();
         }
 
-        IEnumerable<ItemEntityModel> IItemRepository.GetAllFavoriteItem(int customerId)
-        {
-            throw new NotImplementedException();
-        }
-
         bool IItemRepository.ClearAllFavorite(int customerId)
-        {
-            throw new NotImplementedException();
-        }
-
-        bool IItemRepository.UpsertFavoriteItem(int customerId, int itemId, bool isFavourite)
         {
             throw new NotImplementedException();
         }
@@ -371,10 +361,6 @@ namespace Ambit.Infrastructure.Persistence.Repositories
             throw new NotImplementedException();
         }
 
-        IEnumerable<CategoryEntityModel> IItemRepository.GetAllCategory()
-        {
-            throw new NotImplementedException();
-        }
 
     }
 }
