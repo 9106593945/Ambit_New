@@ -7,7 +7,7 @@ namespace Ambit.AppCore.Repositories
 {
 	public interface IItemRepository
 	{
-		IEnumerable<ItemEntityModel> GetAllItems();
+		IEnumerable<ItemEntityModel> GetAllItems(int categoryid, int customerid, int customerLoginId);
 		IEnumerable<ItemEntityModel> GetAllItemsBySearchCrieteria(JDatatableParameters searchParams, out int TotalCount);
 		ItemEntityModel GetItemById(int Id, int customerId);
 		bool UpdateItem(ItemEntityModel itemEntityModel);
@@ -22,5 +22,6 @@ namespace Ambit.AppCore.Repositories
 		bool ClearAllFavorite(int customerId);
 		bool UpsertFavoriteItem(int customerId, int itemId, bool isFavourite);
 		bool UpsertItemCategory(long itemId, string categoryIds);
-	}
+		IEnumerable<CategoryEntityModel> GetAllCategory();
+    }
 }

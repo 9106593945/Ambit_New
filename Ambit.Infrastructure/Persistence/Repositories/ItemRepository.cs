@@ -20,11 +20,14 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 			get { return _dbContext as AppDbContext; }
 		}
 
-		public IEnumerable<ItemEntityModel> GetAllItems()
+		public IEnumerable<ItemEntityModel> GetAllItems(int categoryid, int customerid, int customerLoginId)
 		{
 			var parameters = new DynamicParameters();
+            parameters.Add("categoryid", categoryid);
+            parameters.Add("customerid", customerid);
+            parameters.Add("customerLoginId", customerLoginId);
 
-			var Items = _dapper.GetAll<ItemEntityModel>($"exec [getAllItems]", parameters, commandType: CommandType.Text);
+            var Items = _dapper.GetAll<ItemEntityModel>($"exec [ItemsSelectAll] @categoryid=@categoryid, @customerId = @customerId, @customerLoginId= @customerLoginId", parameters, commandType: CommandType.Text);
 
 			if (Items == null)
 				return null;
@@ -284,5 +287,94 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 				});
 			return Item;
 		}
-	}
+
+
+        public IEnumerable<CategoryEntityModel> GetAllCategory()
+        {
+            var parameters = new DynamicParameters();
+
+            var Items = _dapper.GetAll<CategoryEntityModel>($"exec [CategorySelectAll]", parameters, commandType: CommandType.Text);
+
+            if (Items == null)
+                return null;
+
+            return Items;
+        }
+
+        IEnumerable<ItemEntityModel> IItemRepository.GetAllItemsBySearchCrieteria(JDatatableParameters searchParams, out int TotalCount)
+        {
+            throw new NotImplementedException();
+        }
+
+        ItemEntityModel IItemRepository.GetItemById(int Id, int customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IItemRepository.UpdateItem(ItemEntityModel itemEntityModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        EntityEntry<Items> IItemRepository.AddNewItem(ItemEntityModel itemEntityModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IItemRepository.IsItemCodeExist(string itemCode, int itemId)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IItemRepository.DeleteItem(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IItemRepository.ActiveInactiveItem(long id, bool status)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<ItemEntityModel> IItemRepository.GetItemsByKey(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        ItemEntityModel IItemRepository.GetItemByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<ItemEntityModel> IItemRepository.GetAllItemByCategory(int categoryId, int customerId, int customerLoginId)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<ItemEntityModel> IItemRepository.GetAllFavoriteItem(int customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IItemRepository.ClearAllFavorite(int customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IItemRepository.UpsertFavoriteItem(int customerId, int itemId, bool isFavourite)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IItemRepository.UpsertItemCategory(long itemId, string categoryIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<CategoryEntityModel> IItemRepository.GetAllCategory()
+        {
+            throw new NotImplementedException();
+        }
+
+    }
 }

@@ -7,6 +7,8 @@ using Ambit.API.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ambit.Domain.Entities;
+
 namespace Navrang.Services
 {
 	public class CartService : ICartService
@@ -29,7 +31,7 @@ namespace Navrang.Services
 			CartEntityModel CartEntity = new CartEntityModel();
 			CartEntity = _repoSupervisor.Cart.GetCartById(Id);
 			CartEntity.CartItems = _repoSupervisor.Cart.GetCartItemsByCartId(Id);
-			CartEntity.SubTotal = CartEntity.CartItems.Sum(x => x.Amount);
+			//CartEntity.SubTotal = CartEntity.CartItems.Sum(x => x.Amount);
 
 			return CartEntity;
 		}
@@ -38,19 +40,19 @@ namespace Navrang.Services
 		{
 			try
 			{
-				if (IsCartCodeExist(CartEntityModel.Cart_Number))
-				{
-					return 0;
-				}
-				if (CartEntityModel.CustomerId <= 0)
-				{
-					_repoSupervisor.Customer.AddNewCustomer(new CustomerEntityModel()
-					{
-						Name = CartEntityModel.Customer_Name
-					});
-					_repoSupervisor.Complete();
+				//if (IsCartCodeExist(CartEntityModel.Cart_Number))
+				//{
+				//	return 0;
+				//}
+				//if (CartEntityModel.CustomerId <= 0)
+				//{
+				//	_repoSupervisor.Customer.AddNewCustomer(new CustomerEntityModel()
+				//	{
+				//		Name = CartEntityModel.Customer_Name
+				//	});
+				//	_repoSupervisor.Complete();
 
-				}
+				//}
 				var Cart = _repoSupervisor.Cart.AddNewCart(CartEntityModel);
 				if (Cart != null)
 				{
@@ -84,15 +86,7 @@ namespace Navrang.Services
 								if (itemId > 0)
 								{
 									this.AddCartItems(new CartItemEntityModel()
-									{
-										CartId = Cart.Entity.cartid,
-										ItemId = itemId,
-										Name = itemName,
-										Amount = itemAmount,
-										Quantity = itemQty,
-										SellingPrice = Convert.ToDecimal(itemPrice),
-										Image = itemImage
-									});
+									{});
 								}
 							}
 						}
@@ -133,7 +127,7 @@ namespace Navrang.Services
 			if (_repoSupervisor.Cart.UpdateCart(CartEntity))
 			{
 				_repoSupervisor.Complete();
-				if (CartEntity.CartId > 0)
+				if (CartEntity.cartid > 0)
 				{
 					int.TryParse(collection["hdnTotalItems"], out int TotalItems);
 					for (int intI = 1; intI <= TotalItems; intI++)
@@ -163,13 +157,13 @@ namespace Navrang.Services
 								{
 									this.AddCartItems(new CartItemEntityModel()
 									{
-										CartId = CartEntity.CartId,
-										ItemId = itemId,
-										Name = itemName,
-										Amount = itemAmount,
-										Quantity = itemQty,
-										SellingPrice = Convert.ToDecimal(itemPrice),
-										Image = itemimage
+										//CartId = CartEntity.CartId,
+										//ItemId = itemId,
+										//Name = itemName,
+										//Amount = itemAmount,
+										//Quantity = itemQty,
+										//SellingPrice = Convert.ToDecimal(itemPrice),
+										//Image = itemimage
 									});
 								}
 							}
@@ -177,14 +171,14 @@ namespace Navrang.Services
 							{
 								this.UpdateCartItems(new CartItemEntityModel()
 								{
-									CartItemId = CartItemId,
-									CartId = CartEntity.CartId,
-									ItemId = itemId,
-									Name = itemName,
-									Amount = itemAmount,
-									Quantity = itemQty,
-									SellingPrice = Convert.ToDecimal(itemPrice),
-									Image = itemimage
+									//CartItemId = CartItemId,
+									//CartId = CartEntity.CartId,
+									//ItemId = itemId,
+									//Name = itemName,
+									//Amount = itemAmount,
+									//Quantity = itemQty,
+									//SellingPrice = Convert.ToDecimal(itemPrice),
+									//Image = itemimage
 								});
 							}
 							else if (itemAction == "DE")
@@ -210,13 +204,13 @@ namespace Navrang.Services
 
 		public bool DeleteCart(long id)
 		{
-			_repoSupervisor.Cart.DeleteCartItemsByCartId(id);
-			if (_repoSupervisor.Cart.DeleteCart(id))
-			{
+			_repoSupervisor.Cart.DeleteCartItems(id);
+			//if (_repoSupervisor.Cart.DeleteCart(id))
+			//{
 				_repoSupervisor.Complete();
 				return true;
-			}
-			return false;
+			//}
+			//return false;
 		}
 
 		public bool ActiveInactiveCart(long id, bool status)
@@ -300,10 +294,55 @@ namespace Navrang.Services
 			}
 		}
 
-		public List<CartItemEntityModel> getCustomerCartDetailsById(long customerId)
+		public List<CartItemEntityModel> getCustomerCartDetailsById(int customerId)
 		{
 			return _repoSupervisor.Cart.getCustomerCartDetailsById(customerId);
 		}
 
-	}
+        public Int64 UpsertCart(CartItemEntityModel cartItemEntityModel)
+        {
+            try
+            {
+				var cartId = IsCartExist(cartItemEntityModel.customerloginid);
+                if (cartId > 0)
+                {
+					cartItemEntityModel.cartid = cartId;
+                    var CartItems = _repoSupervisor.Cart.AddCartItems(cartItemEntityModel);
+                    if (CartItems != null)
+                    {
+                        _repoSupervisor.Complete();
+                        return 1;
+                    }
+                }
+				else
+				{
+					CartEntityModel cartEntityModel = new CartEntityModel()
+					{
+						customerloginid = cartItemEntityModel.customerloginid
+					};
+                    var cart = _repoSupervisor.Cart.AddNewCart(cartEntityModel);
+                    _repoSupervisor.Complete();
+                    if (cart != null)
+						cartItemEntityModel.cartid = cart.Entity.cartid;
+                    var CartItems = _repoSupervisor.Cart.AddCartItems(cartItemEntityModel);
+                    if (CartItems != null)
+                    {
+                        _repoSupervisor.Complete();
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                var error = ex.InnerException;
+				return 0;
+            }
+        }
+        public int IsCartExist(int customerloginid)
+        {
+            return _repoSupervisor.Cart.IsCartExist(customerloginid);
+        }
+
+    }
 }

@@ -6,7 +6,7 @@ namespace Ambit.AppCore.Models
 {
 	public interface IitemService 
 	{
-		IEnumerable<ItemEntityModel> GetAllItems();
+		IEnumerable<ItemEntityModel> GetAllItems(int categoryid, int customerid, int customerLoginId);
 		IEnumerable<ItemEntityModel> GetAllItemsBySearchCrieteria(JDatatableParameters searchParams, out int TotalCount);
 
 		ItemEntityModel GetItemByID(int Id,int customerId = 0);
@@ -18,5 +18,7 @@ namespace Ambit.AppCore.Models
 		IEnumerable<ItemEntityModel> GetAllFavoriteItem(int customerId);
 		bool UpsertFavoriteItem(int customerId, int itemId, bool isFavourite);
 		bool ClearAllFavorite(int customerId);
-	}
+		IEnumerable<CategoryEntityModel> GetAllCategory();
+
+    }
 }
