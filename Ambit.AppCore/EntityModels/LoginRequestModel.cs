@@ -9,6 +9,5 @@ namespace Ambit.AppCore.EntityModels
 		[Required(ErrorMessage = "Please enter Password")]
 		public string password { get; set; }
 		public string deviceid { get; set; }
-		public bool remember { get; set; }
 	}
 }

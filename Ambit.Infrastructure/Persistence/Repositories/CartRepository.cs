@@ -284,18 +284,17 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 			try
 			{
 				IQueryable<CartItemEntityModel> CustomerCarts = from st in _dbContext.CartItems
-																join s in _dbContext.Cart on st.cartid equals s.cartid
-																where s.isDeleted == false && st.isDeleted == false && st.customerloginid == customerloginid
-																select new CartItemEntityModel
-																{
-																	Active = st.Active,
-																	cartid = st.cartid,
-																	itemid = st.itemid,
-																	quantity = st.quantity,
-																	isDeleted = st.isDeleted,
-																	Created_On = st.Created_On,
-																	id = st.id
-																};
+													   join s in _dbContext.Cart on st.cartid equals s.cartid
+													   where s.isDeleted == false && st.isDeleted == false && st.customerloginid == customerloginid
+													   select new CartItemEntityModel
+													   {
+														   Active = st.Active ?? true,
+														   cartid = st.cartid,
+														   itemid = st.itemid,
+														   quantity = st.quantity,
+														   Created_On = st.Created_On,
+														   id = st.id
+													   };
 				return CustomerCarts.ToList();
 			}
 			catch (Exception ex)

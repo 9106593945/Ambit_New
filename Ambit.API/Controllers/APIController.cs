@@ -111,57 +111,5 @@ namespace Ambit.API.Controllers
 			var token = tokenHandler.CreateToken(tokenDescriptor);
 			return tokenHandler.WriteToken(token);
 		}
-
-		[AllowAnonymous]
-		[Route("Register")]
-		[HttpPost]
-		public IActionResult Register([FromForm] RegisterRequestModel registerRequest)
-		{
-			var success = false; string Message = "";
-			if (ModelState.IsValid)
-			{
-				var user = _userService.GetCustomerLoginByUserName(registerRequest.username);
-				if (user != null && user.Id > 0)
-				{
-					success = false;
-					Message = "You are already registerd.";
-				}
-				else
-				{
-					var customer = _userService.GetCustomerByUserName(registerRequest.username);
-					//if (customer != null && customer.Id > 0)
-					//{
-					//	registerRequest.customerId = customer.Id;
-					//}
-					var customerReg = _userService.RegisterCustomerLogin(registerRequest);
-					if (customerReg)
-					{
-						success = true;
-						Message = "Your Registration has been successfully received.";
-					}
-				}
-
-				return Ok(new CommonAPIReponse<string>()
-				{
-					data = "",
-					Message = Message,
-					Success = success
-				});
-			}
-			else
-			{
-				return BadRequest();
-			}
-		}
-
-
-		[Route("Banners")]
-		[HttpGet]
-		public IActionResult GetBanners()
-		{
-			var banners = _bannerService.GetAllBanners();
-
-			return Ok(banners);
-		}
 	}
 }

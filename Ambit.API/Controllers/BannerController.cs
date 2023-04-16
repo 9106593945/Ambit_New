@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ambit.API.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("api/[controller]")]
 	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class BannerController : ControllerBase
 	{

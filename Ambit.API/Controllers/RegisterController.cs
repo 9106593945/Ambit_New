@@ -1,14 +1,10 @@
 ﻿using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ambit.API.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class RegisterController : ControllerBase
 	{
 		private readonly IUserService _userService;
@@ -18,8 +14,6 @@ namespace Ambit.API.Controllers
 			_userService = userService;
 		}
 
-		[AllowAnonymous]
-		[Route("CustomerUpsert")]
 		[HttpPost]
 		public IActionResult CustomerUpsert([FromForm] RegisterRequestModel registerRequest)
 		{
@@ -55,6 +49,5 @@ namespace Ambit.API.Controllers
 				return BadRequest();
 			}
 		}
-
 	}
 }
