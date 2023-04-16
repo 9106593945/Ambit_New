@@ -1,12 +1,7 @@
-﻿using Dapper;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Ambit.AppCore.Common;
+﻿using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Repositories;
-using Ambit.Domain.Entities;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace Ambit.Infrastructure.Persistence.Repositories
 {

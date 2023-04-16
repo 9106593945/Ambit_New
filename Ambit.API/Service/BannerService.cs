@@ -1,14 +1,13 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Ambit.API.Helpers;
 using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Models;
-using Ambit.API.Helpers;
-using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 
-namespace Navrang.Services
+namespace Ambit.Services
 {
-    public class BannerService : IBannerService
-    {
+	public class BannerService : IBannerService
+	{
 		private readonly AppSettings _appSettings;
 		private readonly IRepoSupervisor _repoSupervisor;
 		public BannerService(IOptions<AppSettings> appSettings, IRepoSupervisor repoSupervisor)
@@ -21,5 +20,5 @@ namespace Navrang.Services
 		{
 			return _repoSupervisor.Banner.GetAllBanners();
 		}
-    }
+	}
 }

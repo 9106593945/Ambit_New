@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
+﻿using Ambit.API.Helpers;
 using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Models;
-using Ambit.API.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Ambit.Domain.Entities;
+using Microsoft.Extensions.Options;
 
-namespace Navrang.Services
+namespace Ambit.Services
 {
 	public class CartService : ICartService
 	{
@@ -86,7 +81,7 @@ namespace Navrang.Services
 								if (itemId > 0)
 								{
 									this.AddCartItems(new CartItemEntityModel()
-									{});
+									{ });
 								}
 							}
 						}
@@ -207,8 +202,8 @@ namespace Navrang.Services
 			_repoSupervisor.Cart.DeleteCartItems(id);
 			//if (_repoSupervisor.Cart.DeleteCart(id))
 			//{
-				_repoSupervisor.Complete();
-				return true;
+			_repoSupervisor.Complete();
+			return true;
 			//}
 			//return false;
 		}
@@ -299,50 +294,50 @@ namespace Navrang.Services
 			return _repoSupervisor.Cart.getCustomerCartDetailsById(customerId);
 		}
 
-        public Int64 UpsertCart(CartItemEntityModel cartItemEntityModel)
-        {
-            try
-            {
+		public Int64 UpsertCart(CartItemEntityModel cartItemEntityModel)
+		{
+			try
+			{
 				var cartId = IsCartExist(cartItemEntityModel.customerloginid);
-                if (cartId > 0)
-                {
+				if (cartId > 0)
+				{
 					cartItemEntityModel.cartid = cartId;
-                    var CartItems = _repoSupervisor.Cart.AddCartItems(cartItemEntityModel);
-                    if (CartItems != null)
-                    {
-                        _repoSupervisor.Complete();
-                        return 1;
-                    }
-                }
+					var CartItems = _repoSupervisor.Cart.AddCartItems(cartItemEntityModel);
+					if (CartItems != null)
+					{
+						_repoSupervisor.Complete();
+						return 1;
+					}
+				}
 				else
 				{
 					CartEntityModel cartEntityModel = new CartEntityModel()
 					{
 						customerloginid = cartItemEntityModel.customerloginid
 					};
-                    var cart = _repoSupervisor.Cart.AddNewCart(cartEntityModel);
-                    _repoSupervisor.Complete();
-                    if (cart != null)
+					var cart = _repoSupervisor.Cart.AddNewCart(cartEntityModel);
+					_repoSupervisor.Complete();
+					if (cart != null)
 						cartItemEntityModel.cartid = cart.Entity.cartid;
-                    var CartItems = _repoSupervisor.Cart.AddCartItems(cartItemEntityModel);
-                    if (CartItems != null)
-                    {
-                        _repoSupervisor.Complete();
-                        return 1;
-                    }
-                }
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                var error = ex.InnerException;
+					var CartItems = _repoSupervisor.Cart.AddCartItems(cartItemEntityModel);
+					if (CartItems != null)
+					{
+						_repoSupervisor.Complete();
+						return 1;
+					}
+				}
 				return 0;
-            }
-        }
-        public int IsCartExist(int customerloginid)
-        {
-            return _repoSupervisor.Cart.IsCartExist(customerloginid);
-        }
+			}
+			catch (Exception ex)
+			{
+				var error = ex.InnerException;
+				return 0;
+			}
+		}
+		public int IsCartExist(int customerloginid)
+		{
+			return _repoSupervisor.Cart.IsCartExist(customerloginid);
+		}
 
-    }
+	}
 }

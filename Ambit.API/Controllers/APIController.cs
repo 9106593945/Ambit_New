@@ -7,30 +7,27 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
 namespace Ambit.API.Controllers
 {
-    [ApiController]
+	[ApiController]
 	[Route("[controller]")]
 	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class APIController : ControllerBase
 	{
 		private readonly ILogger<APIController> _logger;
 		private readonly IUserService _userService;
-		private readonly IitemService _itemService;
 		private readonly AppSettings _appSettings;
 		private readonly IBannerService _bannerService;
 
 		public APIController(ILogger<APIController> logger, IUserService userService,
-			IOptions<AppSettings> appSettings, IitemService itemService, IBannerService bannerService)
+			IOptions<AppSettings> appSettings, IBannerService bannerService)
 		{
 			_logger = logger;
 			_userService = userService;
-			_itemService = itemService;
 			_bannerService = bannerService;
 			_appSettings = appSettings.Value;
 		}

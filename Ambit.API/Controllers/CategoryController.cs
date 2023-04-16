@@ -4,91 +4,83 @@ using Ambit.AppCore.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
 
 namespace Ambit.API.Controllers
 {
-    [Route("[controller]")]
+	[Route("[controller]")]
 	[ApiController]
 	[Authorize]
 	public class CategoryController : ControllerBase
 	{
-		private readonly ILogger<FavoriteController> _logger;
-        private readonly IitemService _itemService;
-        private readonly AppSettings _appSettings;
-		private readonly IWebHostEnvironment _hostingEnvironment;
-		private readonly IConfiguration _configuration;
+		private readonly ILogger<CategoryController> _logger;
+		private readonly IitemService _itemService;
 
 		public CategoryController(
-			ILogger<FavoriteController> logger,
-            IitemService itemService,
-			IOptions<AppSettings> appSettings,
-			IConfiguration configuration
+			ILogger<CategoryController> logger,
+		  IitemService itemService
 			)
 		{
 			_logger = logger;
-            _itemService = itemService;
-            _appSettings = appSettings.Value;
-			_configuration = configuration;
+			_itemService = itemService;
 		}
 
 
-        [Route("GetAllCategory")]
-        [HttpPost]
-        public IActionResult GetAllCategory()
-        {
-            IEnumerable<CategoryEntityModel> CategoryItems = _itemService.GetAllCategory();
-            var response = new List<CategoryEntityModel>();
-            response = CategoryItems.Select(s => new CategoryEntityModel()
-            {
-                Name = s.Name,
-                Description = s.Description,
-                ImagePath = s.ImagePath,
-                Image = s.Image,
-                CategoryId = s.CategoryId
-            }).ToList();
+		[Route("GetAllCategory")]
+		[HttpPost]
+		public IActionResult GetAllCategory()
+		{
+			IEnumerable<CategoryEntityModel> CategoryItems = _itemService.GetAllCategory();
+			var response = new List<CategoryEntityModel>();
+			response = CategoryItems.Select(s => new CategoryEntityModel()
+			{
+				Name = s.Name,
+				Description = s.Description,
+				ImagePath = s.ImagePath,
+				Image = s.Image,
+				CategoryId = s.CategoryId
+			}).ToList();
 
-            return Ok(response);
-        }
+			return Ok(response);
+		}
 
-        //[Route("ClearAllFavorite")]
-        //[HttpPost]
-        //public IActionResult ClearAllFavorite([FromForm] int customerId, [FromForm] int customerLoginId)
-        //{
-        //    bool favoriteItems = _itemService.ClearAllFavorite(customerLoginId);
-        //    return Ok(new JObject { { "message", "Favorite Items clear successfully." } });
-        //}
-        //[HttpPost]
-        //public IActionResult Test([FromForm] FavoriteItemRequestModel favoriteItemRequestModel)
-        //{
-        //    return Ok(new JObject { { "message", "Favorite Items clear successfully." } });
-        //}
-        //[Route("UpsertFavoriteItem")]
-        //[HttpPost]
-        //public IActionResult UpsertFavoriteItem([FromForm] FavoriteItemRequestModel favoriteItemRequestModel)
-        //{
-        //    bool favoriteItem = _itemService.UpsertFavoriteItem(favoriteItemRequestModel.customerLoginId, favoriteItemRequestModel.itemId, favoriteItemRequestModel.isFavorite);
-        //    if (favoriteItem)
-        //    {
-        //        IEnumerable<ItemAPIEntityModel> favoriteItems = _itemService.GetAllFavoriteItem(favoriteItemRequestModel.customerLoginId)
-        //            .Select(s => new ItemAPIEntityModel()
-        //            {
-        //                Code = s.Code,
-        //                Image = s.Image,
-        //                ImagePath = s.ImagePath,
-        //                Description = s.Description,
-        //                FavoriteItemId = s.favoriteitemId,
-        //                ItemId = s.ItemId,
-        //                Name = s.Name,
-        //                IsFavorite = s.IsFavorite,
-        //                SellAmount = s.SellAmount
-        //            });
+		//[Route("ClearAllFavorite")]
+		//[HttpPost]
+		//public IActionResult ClearAllFavorite([FromForm] int customerId, [FromForm] int customerLoginId)
+		//{
+		//    bool favoriteItems = _itemService.ClearAllFavorite(customerLoginId);
+		//    return Ok(new JObject { { "message", "Favorite Items clear successfully." } });
+		//}
+		//[HttpPost]
+		//public IActionResult Test([FromForm] FavoriteItemRequestModel favoriteItemRequestModel)
+		//{
+		//    return Ok(new JObject { { "message", "Favorite Items clear successfully." } });
+		//}
+		//[Route("UpsertFavoriteItem")]
+		//[HttpPost]
+		//public IActionResult UpsertFavoriteItem([FromForm] FavoriteItemRequestModel favoriteItemRequestModel)
+		//{
+		//    bool favoriteItem = _itemService.UpsertFavoriteItem(favoriteItemRequestModel.customerLoginId, favoriteItemRequestModel.itemId, favoriteItemRequestModel.isFavorite);
+		//    if (favoriteItem)
+		//    {
+		//        IEnumerable<ItemAPIEntityModel> favoriteItems = _itemService.GetAllFavoriteItem(favoriteItemRequestModel.customerLoginId)
+		//            .Select(s => new ItemAPIEntityModel()
+		//            {
+		//                Code = s.Code,
+		//                Image = s.Image,
+		//                ImagePath = s.ImagePath,
+		//                Description = s.Description,
+		//                FavoriteItemId = s.favoriteitemId,
+		//                ItemId = s.ItemId,
+		//                Name = s.Name,
+		//                IsFavorite = s.IsFavorite,
+		//                SellAmount = s.SellAmount
+		//            });
 
-        //        return Ok(favoriteItems);
-        //    }
+		//        return Ok(favoriteItems);
+		//    }
 
-        //    return BadRequest();
-        //}
+		//    return BadRequest();
+		//}
 
-    }
+	}
 }

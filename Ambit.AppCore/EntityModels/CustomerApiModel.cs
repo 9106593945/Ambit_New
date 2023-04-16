@@ -1,12 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Ambit.AppCore.EntityModels
 {
 	public class CustomerEntityModel : BaseEntityModel
 	{
 		public Int64? Customerid { get; set; }
-		[Required(ErrorMessage ="Name is required")]
+		[Required(ErrorMessage = "Name is required")]
 		public string Name { get; set; }
 		public string Customer_Number { get; set; }
 		public string Address { get; set; }

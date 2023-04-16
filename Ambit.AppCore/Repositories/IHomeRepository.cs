@@ -4,6 +4,6 @@
 	{
 		long GetCustomerCount();
 		long GetItemCount();
-		
+
 	}
 }

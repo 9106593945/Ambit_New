@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace Ambit.AppCore.EntityModels
+﻿namespace Ambit.AppCore.EntityModels
 {
 	public class CustomerLoginModel : BaseEntityModel
 	{

@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Ambit.AppCore.EntityModels;
+﻿using Ambit.AppCore.EntityModels;
 using Ambit.Domain.Entities;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Ambit.AppCore.Repositories
 {
@@ -21,6 +20,6 @@ namespace Ambit.AppCore.Repositories
 		IEnumerable<CustomerLoginModel> GetAllCustomerLogin();
 		bool ActiveInactiveCustomerLogin(long id, bool status);
 		bool ApprovedCustomerLogin(long id, bool status);
-		bool UpdateCustomerToLogin(long id, long customerId,string name, string userName, string Password);
+		bool UpdateCustomerToLogin(long id, long customerId, string name, string userName, string Password);
 	}
 }

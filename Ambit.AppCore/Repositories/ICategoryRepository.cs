@@ -1,5 +1,4 @@
 ﻿using Ambit.AppCore.EntityModels;
-using System.Collections.Generic;
 
 namespace Ambit.AppCore.Repositories
 {

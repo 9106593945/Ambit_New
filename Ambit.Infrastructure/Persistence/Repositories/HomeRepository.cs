@@ -1,5 +1,4 @@
 ﻿using Ambit.AppCore.Repositories;
-using System.Linq;
 
 namespace Ambit.Infrastructure.Persistence.Repositories
 {
@@ -28,6 +27,6 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 			return itemCount;
 		}
 
-		
+
 	}
 }

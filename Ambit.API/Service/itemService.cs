@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
+﻿using Ambit.API.Helpers;
 using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Models;
-using Ambit.API.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.Extensions.Options;
 
-namespace Navrang.Services
+namespace Ambit.Services
 {
 	public class itemService : IitemService
 	{
@@ -35,28 +31,6 @@ namespace Navrang.Services
 			return _repoSupervisor.Items.GetAllItemByCategory(categoryId, customerId, customerLoginId);
 		}
 
-		public bool ClearAllFavorite(int customerId)
-		{
-			if (_repoSupervisor.Items.ClearAllFavorite(customerId))
-			{
-				_repoSupervisor.Complete();
-			}
-			return true;
-		}
-
-		public IEnumerable<ItemEntityModel> GetAllFavoriteItem(int customerId)
-		{
-			var favoriteItems = _repoSupervisor.Items.GetAllFavoriteItem(customerId);
-			favoriteItems = favoriteItems
-						.Select(c => { c.ImagePath = _appSettings.SiteUrl + "/images/items/resize/" + c.Image; return c; })
-						.Where(a => a.Active == true)
-						.ToList();
-			return favoriteItems;
-		}
-		public bool UpsertFavoriteItem(int customerId, int itemId, bool isFavourite)
-		{
-			return _repoSupervisor.Items.UpsertFavoriteItem(customerId, itemId, isFavourite);
-		}
 
 		public ItemEntityModel GetItemByID(int Id, int customerId = 0)
 		{
@@ -99,14 +73,14 @@ namespace Navrang.Services
 		}
 
 
-        public IEnumerable<CategoryEntityModel> GetAllCategory()
-        {
-            var favoriteItems = _repoSupervisor.Items.GetAllCategory();
-            favoriteItems = favoriteItems
-                        .Select(c => { c.ImagePath = _appSettings.SiteUrl + "/images/items/resize/" + c.Image; return c; })
-                        .Where(a => a.Active == true)
-                        .ToList();
-            return favoriteItems;
-        }
-    }
+		public IEnumerable<CategoryEntityModel> GetAllCategory()
+		{
+			var favoriteItems = _repoSupervisor.Items.GetAllCategory();
+			favoriteItems = favoriteItems
+					  .Select(c => { c.ImagePath = _appSettings.SiteUrl + "/images/items/resize/" + c.Image; return c; })
+					  .Where(a => a.Active == true)
+					  .ToList();
+			return favoriteItems;
+		}
+	}
 }

@@ -1,12 +1,9 @@
-﻿using Dapper;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Ambit.AppCore.Common;
+﻿using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Repositories;
 using Ambit.Domain.Entities;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Data;
-using System.Linq;
 
 namespace Ambit.Infrastructure.Persistence.Repositories
 {
@@ -243,16 +240,5 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 			}
 			return false;
 		}
-
-		public List<FavoriteItemEntityModel> GetCustomerFavoriteItemById(int customerLoginId)
-		{
-			var Customers = _dapper.GetAll<FavoriteItemEntityModel>("SELECT * FROM FavoriteItem", null, commandType: System.Data.CommandType.Text);
-
-			if (Customers == null)
-				return null;
-
-			return Customers;
-		}
-
 	}
 }

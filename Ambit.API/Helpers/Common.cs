@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Ambit.API.Helpers
 {
@@ -81,12 +76,12 @@ namespace Ambit.API.Helpers
 				{
 					StartInfo =
 					{
-					    FileName = pdfHtmlToPdfExePath,
-					    Arguments = ((options == null) ? "" : String.Join(" ", options)) + " " + urlsSeparatedBySpaces + " " + outputFilename,
-					    UseShellExecute = false, // needs to be false in order to redirect output
+						FileName = pdfHtmlToPdfExePath,
+						Arguments = ((options == null) ? "" : String.Join(" ", options)) + " " + urlsSeparatedBySpaces + " " + outputFilename,
+						UseShellExecute = false, // needs to be false in order to redirect output
 					    RedirectStandardOutput = true,
-					    RedirectStandardError = true,
-					    RedirectStandardInput = true, // redirect all 3, as it should be all 3 or none
+						RedirectStandardError = true,
+						RedirectStandardInput = true, // redirect all 3, as it should be all 3 or none
 					    WorkingDirectory = pdfOutputLocation
 					}
 				};

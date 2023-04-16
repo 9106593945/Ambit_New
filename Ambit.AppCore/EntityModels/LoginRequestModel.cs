@@ -4,7 +4,7 @@ namespace Ambit.AppCore.EntityModels
 {
 	public class LoginRequestModel
 	{
-		[Required(ErrorMessage =	"Please enter User Name")]
+		[Required(ErrorMessage = "Please enter User Name")]
 		public string userName { get; set; }
 		[Required(ErrorMessage = "Please enter Password")]
 		public string password { get; set; }

@@ -1,7 +1,4 @@
-﻿using Ambit.AppCore.EntityModels;
-using System;
-
-namespace Ambit.AppCore.EntityModels
+﻿namespace Ambit.AppCore.EntityModels
 {
 	public class CompanyEntityModel : BaseEntityModel
 	{

@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Ambit.AppCore.EntityModels;
+﻿using Ambit.AppCore.EntityModels;
 using Ambit.Domain.Entities;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Ambit.AppCore.Repositories
 {
@@ -25,6 +24,6 @@ namespace Ambit.AppCore.Repositories
 		bool DeleteCartItemsByCartItemId(long id);
 		List<CartItemEntityModel> getCustomerCartDetailsById(int customerloginid);
 		decimal getCustomerTotalAmountById(long customerId);
-        int IsCartExist(int customerloginid);
-    }
+		int IsCartExist(int customerloginid);
+	}
 }

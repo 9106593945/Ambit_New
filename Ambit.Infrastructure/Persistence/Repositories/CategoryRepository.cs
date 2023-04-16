@@ -1,8 +1,6 @@
 ﻿using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Repositories;
 using Ambit.Domain.Entities;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Ambit.Infrastructure.Persistence.Repositories
 {

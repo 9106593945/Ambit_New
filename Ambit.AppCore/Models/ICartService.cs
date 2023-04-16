@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Ambit.AppCore.Models
 {
-    public interface ICartService
+	public interface ICartService
 	{
 		IEnumerable<CartEntityModel> GetCartList();
 		CartEntityModel GetCartByID(int Id);
@@ -17,6 +17,6 @@ namespace Ambit.AppCore.Models
 		List<ItemEntityModel> GetSerchItems(string term);
 		bool AddCartItems(CartItemEntityModel CartItemEntity);
 		List<CartItemEntityModel> getCustomerCartDetailsById(int customerId);
-        Int64 UpsertCart(CartItemEntityModel cartItemEntityModel);
+		Int64 UpsertCart(CartItemEntityModel cartItemEntityModel);
 	}
 }

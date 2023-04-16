@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Ambit.AppCore.EntityModels;
+﻿using Ambit.AppCore.EntityModels;
 using Ambit.Domain.Entities;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Ambit.AppCore.Repositories
 {
@@ -18,10 +17,7 @@ namespace Ambit.AppCore.Repositories
 		IEnumerable<ItemEntityModel> GetItemsByKey(string key);
 		ItemEntityModel GetItemByName(string name);
 		IEnumerable<ItemEntityModel> GetAllItemByCategory(int categoryId, int customerId, int customerLoginId);
-		IEnumerable<ItemEntityModel> GetAllFavoriteItem(int customerId);
-		bool ClearAllFavorite(int customerId);
-		bool UpsertFavoriteItem(int customerId, int itemId, bool isFavourite);
 		bool UpsertItemCategory(long itemId, string categoryIds);
 		IEnumerable<CategoryEntityModel> GetAllCategory();
-    }
+	}
 }

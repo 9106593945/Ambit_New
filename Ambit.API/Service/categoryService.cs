@@ -1,15 +1,13 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Ambit.API.Helpers;
 using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Models;
-using Ambit.API.Helpers;
-using System;
-using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 
-namespace Navrang.Services
+namespace Ambit.Services
 {
-	public class categoryService : ICategoryservice
-	{
+     public class categoryService : ICategoryservice
+     {
           private readonly AppSettings _appSettings;
           private readonly IRepoSupervisor _repoSupervisor;
           public categoryService(IOptions<AppSettings> appSettings, IRepoSupervisor repoSupervisor)
@@ -30,20 +28,20 @@ namespace Navrang.Services
 
           public bool AddNewCategory(CategoryEntityModel CategoryEntityModel)
           {
-			try
-			{
-                   
+               try
+               {
+
                     if (_repoSupervisor.Category.AddNewCategory(CategoryEntityModel))
                     {
                          _repoSupervisor.Complete();
                          return true;
                     }
                }
-			catch (Exception ex)
-			{
+               catch (Exception ex)
+               {
                     var error = ex.InnerException;
-			}
-			
+               }
+
                return false;
           }
           public bool UpdateCategory(CategoryEntityModel CategoryEntityModel)
@@ -68,7 +66,7 @@ namespace Navrang.Services
 
           public bool ActiveInactiveCategory(long id, bool status)
           {
-               if (_repoSupervisor.Category.ActiveInactiveCategory(id,status))
+               if (_repoSupervisor.Category.ActiveInactiveCategory(id, status))
                {
                     _repoSupervisor.Complete();
                     return true;

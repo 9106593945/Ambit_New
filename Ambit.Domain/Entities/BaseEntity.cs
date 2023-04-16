@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ambit.Domain.Entities
+﻿namespace Ambit.Domain.Entities
 {
 	public class BaseEntity
 	{

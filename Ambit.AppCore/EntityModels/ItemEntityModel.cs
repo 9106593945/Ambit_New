@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ambit.AppCore.EntityModels
 {
-    public class ItemEntityModel : BaseEntityModel
+	public class ItemEntityModel : BaseEntityModel
 	{
 		public long? favoriteitemId { get; set; }
 		public long? ItemId { get; set; }

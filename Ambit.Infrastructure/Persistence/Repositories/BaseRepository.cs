@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ambit.Infrastructure.Persistence.Repositories
+﻿namespace Ambit.Infrastructure.Persistence.Repositories
 {
-     public abstract class BaseRepository
-     {
-          protected readonly AppDbContext _dbContext;
-          public BaseRepository(AppDbContext dbContext)
-          {
-               _dbContext = dbContext;
-          }
-     }
+	public abstract class BaseRepository
+	{
+		protected readonly AppDbContext _dbContext;
+		public BaseRepository(AppDbContext dbContext)
+		{
+			_dbContext = dbContext;
+		}
+	}
 }

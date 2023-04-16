@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Options;
-using Ambit.AppCore.EntityModels;
+﻿using Ambit.API.Helpers;
 using Ambit.AppCore.Common;
-using Ambit.API.Helpers;
+using Ambit.AppCore.EntityModels;
+using Microsoft.Extensions.Options;
 
-namespace Navrang.Services
+namespace Ambit.Services
 {
-	public class userService : IUserService
+     public class userService : IUserService
      {
           private readonly AppSettings _appSettings;
           private readonly IRepoSupervisor _repoSupervisor;
@@ -49,7 +49,8 @@ namespace Navrang.Services
                return false;
           }
 
-          public UserApiModel GetCustomerByUserName(string userName) {
+          public UserApiModel GetCustomerByUserName(string userName)
+          {
 
                return _repoSupervisor.Logins.GetCustomerByUserName(userName);
           }

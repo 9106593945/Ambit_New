@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Ambit.AppCore.Common;
+﻿using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Repositories;
 using Ambit.Domain.Entities;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Ambit.Infrastructure.Persistence.Repositories
 {
@@ -72,7 +70,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 			var CartItems = _dbContext.CartItems
 				.Where(a => a.isDeleted == false && a.cartid == Id)
 				.Select(x => new CartItemEntityModel()
-				{})
+				{ })
 				.ToList();
 
 			if (CartItems == null)
@@ -108,12 +106,12 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 				cartid = CartItem.cartid,
 				quantity = CartItem.quantity,
 				Active = CartItem.Active,
-                isDeleted = CartItem.isDeleted,
-                Created_On = CartItem.Created_On,
-                Created_By = CartItem.Created_By,
-                Updated_On = CartItem.Updated_On,
-                Updated_By = CartItem.Updated_By,
-                customerloginid = CartItem.customerloginid,
+				isDeleted = CartItem.isDeleted,
+				Created_On = CartItem.Created_On,
+				Created_By = CartItem.Created_By,
+				Updated_On = CartItem.Updated_On,
+				Updated_By = CartItem.Updated_By,
+				customerloginid = CartItem.customerloginid,
 			});
 
 			return CartItems;
@@ -264,19 +262,19 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 			var items = _dbContext.Items
 						.Where(i => i.isDeleted == false && i.Active == true && (i.name.Contains(term) || i.code.Contains(term)))
-					    .Select(s => new ItemEntityModel()
-					    {
-						    Code = s.code,
-						    Image = s.image,
-						    Discount = s.discount,
-						    Name = s.name,
-						    ItemId = s.itemid,
-						    SellAmount = s.sellamount,
-						    PurchaseAmount = s.purchaseamount,
-						    OpeningQuantity = s.openingquantity,
-						    Description = s.description
-					    })
-					    .ToList();
+						.Select(s => new ItemEntityModel()
+						{
+							Code = s.code,
+							Image = s.image,
+							Discount = s.discount,
+							Name = s.name,
+							ItemId = s.itemid,
+							SellAmount = s.sellamount,
+							PurchaseAmount = s.purchaseamount,
+							OpeningQuantity = s.openingquantity,
+							Description = s.description
+						})
+						.ToList();
 
 			return items;
 		}
@@ -285,27 +283,27 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 		{
 			try
 			{
-                IQueryable<CartItemEntityModel> CustomerCarts = from st in _dbContext.CartItems
-                                                                join s in _dbContext.Cart on st.cartid equals s.cartid
-                                                                where s.isDeleted == false && st.isDeleted == false && st.customerloginid == customerloginid
-                                                                select new CartItemEntityModel
-                                                                {
-                                                                    Active = st.Active,
-                                                                    cartid = st.cartid,
-                                                                    itemid = st.itemid,
-                                                                    quantity = st.quantity,
-                                                                    isDeleted = st.isDeleted,
-                                                                    Created_On = st.Created_On,
+				IQueryable<CartItemEntityModel> CustomerCarts = from st in _dbContext.CartItems
+																join s in _dbContext.Cart on st.cartid equals s.cartid
+																where s.isDeleted == false && st.isDeleted == false && st.customerloginid == customerloginid
+																select new CartItemEntityModel
+																{
+																	Active = st.Active,
+																	cartid = st.cartid,
+																	itemid = st.itemid,
+																	quantity = st.quantity,
+																	isDeleted = st.isDeleted,
+																	Created_On = st.Created_On,
 																	id = st.id
-                                                                };
-                return CustomerCarts.ToList();
-            }
+																};
+				return CustomerCarts.ToList();
+			}
 			catch (Exception ex)
 			{
 
 				throw;
 			}
-			
+
 		}
 
 		public decimal getCustomerTotalAmountById(long customerId)
@@ -315,23 +313,23 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 				.Sum(s => s.cartid);
 			return totalAmount;
 		}
-        public int IsCartExist(int customerloginid)
-        {
+		public int IsCartExist(int customerloginid)
+		{
 			try
 			{
-                var Cart = _dbContext.Cart.Where(i => i.customerloginid == customerloginid);
-                if (Cart != null && Cart.Count() > 0)
-                {
-                    return Convert.ToInt32(Cart.FirstOrDefault().cartid);
-                }
-                return 0;
-            }
+				var Cart = _dbContext.Cart.Where(i => i.customerloginid == customerloginid);
+				if (Cart != null && Cart.Count() > 0)
+				{
+					return Convert.ToInt32(Cart.FirstOrDefault().cartid);
+				}
+				return 0;
+			}
 			catch (Exception ex)
 			{
 				throw;
 			}
-            
-        }
 
-    }
+		}
+
+	}
 }

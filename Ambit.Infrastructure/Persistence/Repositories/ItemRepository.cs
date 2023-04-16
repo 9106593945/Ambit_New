@@ -8,7 +8,7 @@ using System.Data;
 
 namespace Ambit.Infrastructure.Persistence.Repositories
 {
-    public class ItemRepository : BaseRepository, IItemRepository
+	public class ItemRepository : BaseRepository, IItemRepository
 	{
 		private readonly IDapper _dapper;
 		public ItemRepository(AppDbContext dbContext, IDapper dapper) : base(dbContext)
@@ -23,11 +23,11 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 		public IEnumerable<ItemEntityModel> GetAllItems(int categoryid, int customerid, int customerLoginId)
 		{
 			var parameters = new DynamicParameters();
-            parameters.Add("categoryid", categoryid);
-            parameters.Add("customerid", customerid);
-            parameters.Add("customerLoginId", customerLoginId);
+			parameters.Add("categoryid", categoryid);
+			parameters.Add("customerid", customerid);
+			parameters.Add("customerLoginId", customerLoginId);
 
-            var Items = _dapper.GetAll<ItemEntityModel>($"exec [ItemsSelectAll] @categoryid=@categoryid, @customerId = @customerId, @customerLoginId= @customerLoginId", parameters, commandType: CommandType.Text);
+			var Items = _dapper.GetAll<ItemEntityModel>($"exec [ItemsSelectAll] @categoryid=@categoryid, @customerId = @customerId, @customerLoginId= @customerLoginId", parameters, commandType: CommandType.Text);
 
 			if (Items == null)
 				return null;
@@ -94,17 +94,6 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 				return null;
 
 			return Items;
-		}
-
-		public bool ClearAllFavorite(int customerId)
-		{
-			var FavoriteItem = _dbContext.favoriteItem.Where(s => s.isDeleted == false && s.customerid == customerId);
-			if (FavoriteItem != null)
-			{
-				FavoriteItem.ToList().ForEach(c => c.isDeleted = true);
-				return true;
-			}
-			return false;
 		}
 
 		public bool UpsertFavoriteItem(int customerId, int itemId, bool isFavourite)
@@ -288,18 +277,17 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 			return Item;
 		}
 
+		public IEnumerable<CategoryEntityModel> GetAllCategory()
+		{
+			var parameters = new DynamicParameters();
 
-        public IEnumerable<CategoryEntityModel> GetAllCategory()
-        {
-            var parameters = new DynamicParameters();
+			var Items = _dapper.GetAll<CategoryEntityModel>($"exec [CategorySelectAll]", parameters, commandType: CommandType.Text);
 
-            var Items = _dapper.GetAll<CategoryEntityModel>($"exec [CategorySelectAll]", parameters, commandType: CommandType.Text);
+			if (Items == null)
+				return null;
 
-            if (Items == null)
-                return null;
+			return Items;
+		}
 
-            return Items;
-        }
-
-    }
+	}
 }

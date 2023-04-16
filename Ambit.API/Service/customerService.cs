@@ -1,13 +1,10 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Ambit.API.Helpers;
 using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Models;
-using Ambit.API.Helpers;
-using System;
-using System.Collections.Generic;
-using Ambit.API.Helpers;
+using Microsoft.Extensions.Options;
 
-namespace Navrang.Services
+namespace Ambit.Services
 {
 	public class customerService : ICustomerService
 	{
