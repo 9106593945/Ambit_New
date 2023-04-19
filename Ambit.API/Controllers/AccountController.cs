@@ -1,7 +1,6 @@
 ﻿using Ambit.API.Helpers;
 using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -14,14 +13,13 @@ namespace Ambit.API.Controllers
 {
 	[ApiController]
 	[Route("[controller]")]
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class AccountController : ControllerBase
 	{
-		private readonly ILogger<APIController> _logger;
+		private readonly ILogger<AccountController> _logger;
 		private readonly IUserService _userService;
 		private readonly AppSettings _appSettings;
 
-		public AccountController(ILogger<APIController> logger, IUserService userService,
+		public AccountController(ILogger<AccountController> logger, IUserService userService,
 			IOptions<AppSettings> appSettings)
 		{
 			_logger = logger;

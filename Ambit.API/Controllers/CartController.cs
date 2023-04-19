@@ -1,18 +1,13 @@
 ﻿using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ambit.API.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	[Authorize]
-	public class CartController : ControllerBase
+	public class CartController : BaseAPIController
 	{
 		private readonly ILogger<CartController> _logger;
 		private readonly ICartService _CartService;
-		//private readonly IGeneratePdf _generatePdf;
 
 		public CartController(
 			ILogger<CartController> logger,
@@ -23,31 +18,28 @@ namespace Ambit.API.Controllers
 			_CartService = CartService;
 		}
 
-		[Route("Get")]
-		[HttpPost]
+		[HttpGet]
 		public IActionResult Get([FromForm] int customerId)
 		{
 			var cartItems = _CartService.getCustomerCartDetailsById(customerId);
-			return new OkObjectResult(cartItems);
+			var response = new CommonAPIReponse<List<CartItemEntityModel>>() { Success = true, Message = "", data = cartItems };
+
+			return new OkObjectResult(response);
 		}
 
-		[Route("UpsertCart")]
 		[HttpPost]
 		public IActionResult UpsertCart([FromBody] CartItemEntityModel cartItemEntityModel)
 		{
 			var cartItems = _CartService.UpsertCart(cartItemEntityModel);
+
 			return new OkObjectResult(cartItems);
 		}
 
-
-		// DELETE api/<CartController>/5
-		[Route("Delete")]
-		[HttpPost]
+		[HttpDelete]
 		public IActionResult Delete([FromForm] int id)
 		{
 			var delte = _CartService.DeleteCart(id);
 			return new OkObjectResult(delte);
-
 		}
 	}
 }

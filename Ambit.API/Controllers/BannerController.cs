@@ -1,14 +1,10 @@
-﻿using Ambit.AppCore.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Ambit.AppCore.EntityModels;
+using Ambit.AppCore.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ambit.API.Controllers
 {
-	[ApiController]
-	[Route("api/[controller]")]
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-	public class BannerController : ControllerBase
+	public class BannerController : BaseAPIController
 	{
 		private readonly IBannerService _bannerService;
 
@@ -17,11 +13,16 @@ namespace Ambit.API.Controllers
 			_bannerService = bannerService;
 		}
 
-		[Route("Banners")]
 		[HttpGet]
 		public IActionResult GetBanners()
 		{
-			return Ok(_bannerService.GetAllBanners());
+			CommonAPIReponse<IEnumerable<BannerEntityModel>> response = new()
+			{
+				data = _bannerService.GetAllBanners(),
+				Message = "Banners get successfully",
+				Success = true
+			};
+			return Ok(response);
 		}
 	}
 }

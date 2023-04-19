@@ -294,7 +294,7 @@ namespace Ambit.Services
 			return _repoSupervisor.Cart.getCustomerCartDetailsById(customerId);
 		}
 
-		public Int64 UpsertCart(CartItemEntityModel cartItemEntityModel)
+		public int UpsertCart(CartItemEntityModel cartItemEntityModel)
 		{
 			try
 			{
@@ -338,6 +338,5 @@ namespace Ambit.Services
 		{
 			return _repoSupervisor.Cart.IsCartExist(customerloginid);
 		}
-
 	}
 }

@@ -1,16 +1,12 @@
 ﻿using Ambit.API.Helpers;
 using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace Ambit.API.Controllers
 {
-	[Route("[controller]")]
-	[ApiController]
-	[Authorize]
-	public class ItemsController : ControllerBase
+	public class ItemsController : BaseAPIController
 	{
 		private readonly ILogger<ItemsController> _logger;
 		private readonly IitemService _itemService;
@@ -33,61 +29,33 @@ namespace Ambit.API.Controllers
 		public IActionResult GetAllItems([FromForm] int categoryid, [FromForm] int customerid, [FromForm] int customerLoginId)
 		{
 			IEnumerable<ItemEntityModel> CategoryItems = _itemService.GetAllItems(categoryid, customerid, customerLoginId);
-			var response = new List<ItemAPIEntityModel>();
-			response = CategoryItems.Select(s => new ItemAPIEntityModel()
-			{
-				Code = s.Code,
-				Image = s.Image,
-				ImagePath = s.ImagePath,
-				Description = s.Description,
-				FavoriteItemId = s.favoriteitemId,
-				ItemId = s.ItemId,
-				Name = s.Name,
-				IsFavorite = s.IsFavorite,
-				SellAmount = s.SellAmount
-			}).ToList();
 
+			var response = new CommonAPIReponse<dynamic>()
+			{
+				data = CategoryItems.Select(s => new
+				{
+					Code = s.Code,
+					Image = s.Image,
+					ImagePath = s.ImagePath,
+					Description = s.Description,
+					FavoriteItemId = s.favoriteitemId,
+					ItemId = s.ItemId,
+					Name = s.Name,
+					IsFavorite = s.IsFavorite,
+					SellAmount = s.SellAmount
+				}).ToList(),
+				Message = "Items retrived successfully.",
+				Success = true
+			};
 			return Ok(response);
 		}
 
-		//[Route("ClearAllFavorite")]
-		//[HttpPost]
-		//public IActionResult ClearAllFavorite([FromForm] int customerId, [FromForm] int customerLoginId)
-		//{
-		//    bool favoriteItems = _itemService.ClearAllFavorite(customerLoginId);
-		//    return Ok(new JObject { { "message", "Favorite Items clear successfully." } });
-		//}
-		//[HttpPost]
-		//public IActionResult Test([FromForm] FavoriteItemRequestModel favoriteItemRequestModel)
-		//{
-		//    return Ok(new JObject { { "message", "Favorite Items clear successfully." } });
-		//}
-		//[Route("UpsertFavoriteItem")]
-		//[HttpPost]
-		//public IActionResult UpsertFavoriteItem([FromForm] FavoriteItemRequestModel favoriteItemRequestModel)
-		//{
-		//    bool favoriteItem = _itemService.UpsertFavoriteItem(favoriteItemRequestModel.customerLoginId, favoriteItemRequestModel.itemId, favoriteItemRequestModel.isFavorite);
-		//    if (favoriteItem)
-		//    {
-		//        IEnumerable<ItemAPIEntityModel> favoriteItems = _itemService.GetAllFavoriteItem(favoriteItemRequestModel.customerLoginId)
-		//            .Select(s => new ItemAPIEntityModel()
-		//            {
-		//                Code = s.Code,
-		//                Image = s.Image,
-		//                ImagePath = s.ImagePath,
-		//                Description = s.Description,
-		//                FavoriteItemId = s.favoriteitemId,
-		//                ItemId = s.ItemId,
-		//                Name = s.Name,
-		//                IsFavorite = s.IsFavorite,
-		//                SellAmount = s.SellAmount
-		//            });
-
-		//        return Ok(favoriteItems);
-		//    }
-
-		//    return BadRequest();
-		//}
-
+		[HttpGet("ItemInfoById")]
+		public IActionResult ItemsInfo(int id, int customerid)
+		{
+			ItemEntityModel itemDetail = _itemService.GetItemByID(id, customerid);
+			itemDetail.ImagePath = "/images/items/resize/" + (!string.IsNullOrEmpty(itemDetail.Image) ? itemDetail.Image : "no-image.png");
+			return Ok(itemDetail);
+		}
 	}
 }

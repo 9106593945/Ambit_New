@@ -17,6 +17,6 @@ namespace Ambit.AppCore.Models
 		List<ItemEntityModel> GetSerchItems(string term);
 		bool AddCartItems(CartItemEntityModel CartItemEntity);
 		List<CartItemEntityModel> getCustomerCartDetailsById(int customerId);
-		Int64 UpsertCart(CartItemEntityModel cartItemEntityModel);
+		int UpsertCart(CartItemEntityModel cartItemEntityModel);
 	}
 }

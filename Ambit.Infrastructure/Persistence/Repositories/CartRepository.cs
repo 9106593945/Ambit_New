@@ -2,6 +2,7 @@
 using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Repositories;
 using Ambit.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Ambit.Infrastructure.Persistence.Repositories
@@ -93,8 +94,6 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 				customername = "",
 
 			});
-
-
 			return Cart;
 		}
 
@@ -273,7 +272,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 							PurchaseAmount = s.purchaseamount,
 							OpeningQuantity = s.openingquantity,
 							Description = s.description
-						})
+						}).AsNoTracking()
 						.ToList();
 
 			return items;
@@ -316,10 +315,10 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 		{
 			try
 			{
-				var Cart = _dbContext.Cart.Where(i => i.customerloginid == customerloginid);
-				if (Cart != null && Cart.Count() > 0)
+				var Cart = _dbContext.Cart.Where(i => i.customerloginid == customerloginid).AsNoTracking();
+				if (Cart != null && Cart.Any())
 				{
-					return Convert.ToInt32(Cart.FirstOrDefault().cartid);
+					return Convert.ToInt32(Cart.First().cartid);
 				}
 				return 0;
 			}

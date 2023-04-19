@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ambit.API.Controllers
 {
 	[ApiController]
+	[Route("api/[controller]")]
 	public class RegisterController : ControllerBase
 	{
 		private readonly IUserService _userService;
