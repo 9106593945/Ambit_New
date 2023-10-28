@@ -19,7 +19,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public IEnumerable<BannerEntityModel> GetAllBanners()
 		{
-			var Banners = _dapper.GetAll<BannerEntityModel>($"exec [BannerSelectAll]", null, commandType: CommandType.Text);
+			var Banners = _dapper.GetAll<BannerEntityModel>($"exec [GetAllBanners]", null, commandType: CommandType.Text);
 
 			return Banners;
 		}

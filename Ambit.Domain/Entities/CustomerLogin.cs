@@ -5,14 +5,15 @@ namespace Ambit.Domain.Entities
 	public class CustomerLogin : BaseEntity
 	{
 		[Key]
-		public Int64 customerloginid { get; set; }
-		public Int64 customerid { get; set; }
-		public string name { get; set; }
-		public string username { get; set; }
-		public string password { get; set; }
-		public string deviceid { get; set; }
-		public bool isapproved { get; set; }
-		public string invitationcode { get; set; }
-		public string type { get; set; }
+		public long Customerloginid { get; set; }
+		public long Customerid { get; set; }
+		public string Name { get; set; }
+		public string Username { get; set; }
+		public string Password { get; set; }
+		public string Deviceid { get; set; }
+		public bool Isapproved { get; set; }
+		public string Invitationcode { get; set; }
+		public string Type { get; set; }
+		public int ParentId { get; set; }
 	}
 }

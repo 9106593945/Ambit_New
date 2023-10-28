@@ -7,7 +7,7 @@ using System.Data;
 
 namespace Ambit.Infrastructure.Persistence.Repositories
 {
-	public class CustomerRepository : BaseRepository, ICustomerRepository
+	public class CustomerRepository : GenericRepository<CustomerLogin>, ICustomerRepository
 	{
 		private readonly IDapper _dapper;
 
@@ -17,12 +17,12 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 		}
 		public AppDbContext AppDbContext
 		{
-			get { return _dbContext as AppDbContext; }
+			get { return _context as AppDbContext; }
 		}
 
 		public IEnumerable<CustomerEntityModel> AllCustomers()
 		{
-			return _dbContext.Customer.Where(a => a.isDeleted == false)
+			return _context.Customer.Where(a => a.isDeleted == false)
 					.Select(x => new CustomerEntityModel()
 					{
 						Customer_Number = x.customer_number,
@@ -42,7 +42,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public CustomerEntityModel GetCustomerById(int Id)
 		{
-			var Customers = _dbContext.Customer.Where(a => a.isDeleted == false && a.customerid == Id)
+			var Customers = _context.Customer.Where(a => a.isDeleted == false && a.customerid == Id)
 				.Select(x => new CustomerEntityModel()
 				{
 					Customer_Number = x.customer_number,
@@ -71,7 +71,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public EntityEntry<Customer> AddNewCustomer(CustomerEntityModel CustomerEntityModel)
 		{
-			var customer = _dbContext.Customer.Add(new Customer
+			var customer = _context.Customer.Add(new Customer
 			{
 				customer_number = CustomerEntityModel.Customer_Number,
 				Name = CustomerEntityModel.Name,
@@ -90,9 +90,15 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 			return customer;
 		}
 
+		public long GetCustomerIdFromInvitationCode(string invitationCode)
+		{
+			var customer = _context.CustomerLogin.FirstOrDefault(s => s.Invitationcode == invitationCode);
+			return customer?.Customerid ?? 0;
+		}
+
 		public bool UpdateCustomerNumber(long customerId, string customerNumber)
 		{
-			var customer = _dbContext.Customer.Find(customerId);
+			var customer = _context.Customer.Find(customerId);
 			if (customer != null)
 			{
 				customer.customer_number = customerNumber;
@@ -102,7 +108,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public bool UpdateCustomer(CustomerEntityModel CustomerEntityModel)
 		{
-			var Customer = _dbContext.Customer.Find(CustomerEntityModel.Customerid);
+			var Customer = _context.Customer.Find(CustomerEntityModel.Customerid);
 			if (Customer != null)
 			{
 				Customer.Name = CustomerEntityModel.Name;
@@ -123,8 +129,8 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public bool IsCustomerCodeExist(string CustomerCode)
 		{
-			var Customer = _dbContext.Customer.Where(i => i.customer_number.ToUpper() == CustomerCode.ToUpper() && i.isDeleted == false);
-			if (Customer != null && Customer.Count() > 0)
+			var Customer = _context.Customer.Where(i => i.customer_number.ToUpper() == CustomerCode.ToUpper() && i.isDeleted == false);
+			if (Customer != null && Customer.Any())
 			{
 				return true;
 			}
@@ -133,7 +139,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public CustomerEntityModel GetCustomerDetailByName(string CustomerName)
 		{
-			var Customer = _dbContext.Customer
+			var Customer = _context.Customer
 				.Where(i => i.Name.ToUpper() == CustomerName.ToUpper() && i.isDeleted == false)
 				.Select(s => new CustomerEntityModel()
 				{
@@ -146,7 +152,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public bool DeleteCustomer(long id)
 		{
-			var Customer = _dbContext.Customer.Find(id);
+			var Customer = _context.Customer.Find(id);
 			if (Customer != null)
 			{
 				Customer.isDeleted = true;
@@ -157,7 +163,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public bool ActiveInactiveCustomer(long id, bool status)
 		{
-			var Customer = _dbContext.Customer.Find(id);
+			var Customer = _context.Customer.Find(id);
 			if (Customer != null)
 			{
 				Customer.Active = status;
@@ -168,7 +174,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public List<CustomerEntityModel> GetCustomersByKey(string key)
 		{
-			var Customer = _dbContext.Customer.Where(i => (i.Name.Contains(key) || i.customer_number.Contains(key)) && i.isDeleted == false && i.Active == true)
+			var Customer = _context.Customer.Where(i => (i.Name.Contains(key) || i.customer_number.Contains(key)) && i.isDeleted == false && i.Active == true)
 				.Select(x => new CustomerEntityModel()
 				{
 					Customer_Number = x.customer_number,
@@ -184,7 +190,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public IEnumerable<CustomerLoginModel> GetAllCustomerLogin()
 		{
-			var customerLogin = _dbContext.ViewAllCustomerLogin.Select(s => new CustomerLoginModel()
+			var customerLogin = _context.ViewAllCustomerLogin.Select(s => new CustomerLoginModel()
 			{
 				Customer_Number = s.customer_number,
 				Customerid = s.customerid,
@@ -207,7 +213,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public bool ActiveInactiveCustomerLogin(long id, bool status)
 		{
-			var Customer = _dbContext.CustomerLogin.Find(id);
+			var Customer = _context.CustomerLogin.Find(id);
 			if (Customer != null)
 			{
 				Customer.Active = status;
@@ -218,24 +224,24 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public bool ApprovedCustomerLogin(long id, bool status)
 		{
-			var Customer = _dbContext.CustomerLogin.Find(id);
+			var Customer = _context.CustomerLogin.Find(id);
 			if (Customer != null)
 			{
-				Customer.isapproved = status;
+				Customer.Isapproved = status;
 				return true;
 			}
 			return false;
 		}
 
-		public bool UpdateCustomerToLogin(long id, long customerId, string name, string userName, string Password)
+		public bool UpdateCustomerToLogin(long id, int customerId, string name, string userName, string Password)
 		{
-			var Customer = _dbContext.CustomerLogin.Find(id);
+			var Customer = _context.CustomerLogin.Find(id);
 			if (Customer != null)
 			{
-				Customer.customerid = customerId;
-				Customer.username = userName ?? Customer.username;
-				Customer.password = Password ?? Customer.password;
-				Customer.name = name ?? Customer.name;
+				Customer.Customerid = customerId;
+				Customer.Username = userName ?? Customer.Username;
+				Customer.Password = Password ?? Customer.Password;
+				Customer.Name = name ?? Customer.Name;
 				return true;
 			}
 			return false;

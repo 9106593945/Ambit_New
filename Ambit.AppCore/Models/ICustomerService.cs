@@ -16,6 +16,6 @@ namespace Ambit.AppCore.Models
 		IEnumerable<CustomerLoginModel> GetAllCustomerLogin();
 		bool ActiveInactiveCustomerLogin(long id, bool status);
 		bool ApprovedCustomerLogin(long id, bool status);
-		bool UpdateCustomerToLogin(long id, long customerId, string name, string userName, string Password);
+		bool UpdateCustomerToLogin(long id, int customerId, string name, string userName, string Password);
 	}
 }

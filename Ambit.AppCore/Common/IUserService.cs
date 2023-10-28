@@ -1,4 +1,5 @@
 ﻿using Ambit.AppCore.EntityModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Ambit.AppCore.Common
 {
@@ -6,7 +7,7 @@ namespace Ambit.AppCore.Common
 	{
 		UserApiModel Authenticate(string email, string password);
 		UserApiModel GetCustomerLoginByUserName(string userName);
-		bool RegisterCustomerLogin(RegisterRequestModel registerRequest);
+		ObjectResult RegisterCustomerLogin(RegisterRequestModel registerRequest);
 		UserApiModel GetCustomerByUserName(string userName);
 	}
 }

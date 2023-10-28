@@ -175,7 +175,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 		public bool IsCartCodeExist(string CartCode)
 		{
 			var Cart = _dbContext.Cart.Where(i => i.isDeleted == false);
-			if (Cart != null && Cart.Count() > 0)
+			if (Cart != null && Cart.Any())
 			{
 				return true;
 			}

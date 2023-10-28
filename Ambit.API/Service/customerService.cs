@@ -138,7 +138,7 @@ namespace Ambit.Services
 			return false;
 		}
 
-		public bool UpdateCustomerToLogin(long id, long customerId, string name, string userName, string Password)
+		public bool UpdateCustomerToLogin(long id, int customerId, string name, string userName, string Password)
 		{
 			if (_repoSupervisor.Customer.UpdateCustomerToLogin(id, customerId, name, userName, Password))
 			{

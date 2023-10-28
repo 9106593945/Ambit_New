@@ -1,12 +1,11 @@
 ﻿using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ambit.API.Controllers
 {
-	[ApiController]
-	[Route("api/[controller]")]
-	public class RegisterController : ControllerBase
+	public class RegisterController : BaseAPIController
 	{
 		private readonly IUserService _userService;
 
@@ -16,34 +15,12 @@ namespace Ambit.API.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult CustomerUpsert([FromForm] RegisterRequestModel registerRequest)
+		[AllowAnonymous]
+		public IActionResult Register([FromBody] RegisterRequestModel registerRequest)
 		{
-			var success = false;
-			string Message = "";
 			if (ModelState.IsValid)
 			{
-				var user = _userService.GetCustomerLoginByUserName(registerRequest.username);
-				if (user != null && user.Id > 0)
-				{
-					success = false;
-					Message = "You are already registerd.";
-				}
-				else
-				{
-					var customerReg = _userService.RegisterCustomerLogin(registerRequest);
-					if (customerReg)
-					{
-						success = true;
-						Message = "Your Registration has been successfully received.";
-					}
-				}
-
-				return Ok(new CommonAPIReponse<string>()
-				{
-					data = "",
-					Message = Message,
-					Success = success
-				});
+				return _userService.RegisterCustomerLogin(registerRequest);
 			}
 			else
 			{

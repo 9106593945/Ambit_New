@@ -1,5 +1,6 @@
 ﻿using Ambit.AppCore.EntityModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Ambit.AppCore.Models
 {
@@ -15,8 +16,8 @@ namespace Ambit.AppCore.Models
 		IEnumerable<CustomerEntityModel> GetAllCustomer();
 		CartEntityModel GetLastCart();
 		List<ItemEntityModel> GetSerchItems(string term);
-		bool AddCartItems(CartItemEntityModel CartItemEntity);
-		List<CartItemEntityModel> getCustomerCartDetailsById(int customerId);
-		int UpsertCart(CartItemEntityModel cartItemEntityModel);
+		ObjectResult AddCartItems(CartItemEntityModel CartItemEntity);
+		ObjectResult getCustomerCartDetailsById(int customerId);
+		ObjectResult UpsertCart(CartItemEntityModel cartItemEntityModel);
 	}
 }

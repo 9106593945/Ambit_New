@@ -1,4 +1,6 @@
-﻿namespace Ambit.Domain.Common
+﻿using System.Security.Cryptography;
+
+namespace Ambit.Domain.Common
 {
 	public static class ExtensionMethods
 	{
@@ -48,6 +50,16 @@
 				return dblValue;
 			}
 			return 0;
+		}
+
+		public static string GenerateRandomOtp(int digit, bool numericOnly = false)
+		{
+			string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+			if (numericOnly)
+			{
+				chars = "1234567890";
+			}
+			return new string(Enumerable.Repeat(chars, digit).Select(s => s[RandomNumberGenerator.GetInt32(0, s.Length)]).ToArray());
 		}
 	}
 }

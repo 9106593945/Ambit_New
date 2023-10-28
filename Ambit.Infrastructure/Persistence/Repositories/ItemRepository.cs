@@ -2,6 +2,7 @@
 using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Repositories;
 using Ambit.Domain.Entities;
+using Azure.Core;
 using Dapper;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Data;
@@ -20,17 +21,19 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 			get { return _dbContext as AppDbContext; }
 		}
 
-		public IEnumerable<ItemEntityModel> GetAllItems(int categoryid, int customerid, int customerLoginId)
+		public IEnumerable<ItemEntityModel> GetAllItems(CategoryItemRequest request)
 		{
 			var parameters = new DynamicParameters();
-			parameters.Add("categoryid", categoryid);
-			parameters.Add("customerid", customerid);
-			parameters.Add("customerLoginId", customerLoginId);
+			parameters.Add("categoryid", request.CategoryId);
+			parameters.Add("customerid", request.CustomerId);
+			parameters.Add("customerLoginId", request.CustomerLoginId);
+			parameters.Add("PageSize", request.PageSize);
+			parameters.Add("PageIndex", request.PageIndex);
 
-			var Items = _dapper.GetAll<ItemEntityModel>($"exec [ItemsSelectAll] @categoryid=@categoryid, @customerId = @customerId, @customerLoginId= @customerLoginId", parameters, commandType: CommandType.Text);
+			var Items = _dapper.GetAll<ItemEntityModel>($"exec [dbo].[getAllItemsByCategory] @categoryid=@categoryid, @customerId = @customerId, @customerLoginId= @customerLoginId", parameters, commandType: CommandType.Text);
 
 			if (Items == null)
-				return null;
+				return Enumerable.Empty<ItemEntityModel>();
 
 			return Items;
 		}
@@ -116,25 +119,6 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 			parameters.Add("id", Id);
 
 			var item = _dapper.Get<ItemEntityModel>($"exec [GetItemById] @id=@id, @customerid = @customerId ", parameters, commandType: CommandType.Text);
-
-			//var Items = _dbContext.ViewAllItems.ToList()
-			//	.Where(i => i.isDeleted == false && i.Itemid == Id)
-			//	.Select(x => new ItemEntityModel()
-			//	{
-			//		Description = x.Description,
-			//		Supplier = x.Supplier,
-			//		Code = x.Code,
-			//		ItemId = x.Itemid,
-			//		Name = x.Name,
-			//		Discount = x.Discount,
-			//		OpeningQuantity = x.OpeningQuantity,
-			//		PurchaseAmount = x.PurchaseAmount,
-			//		SellAmount = x.SellAmount,
-			//		Active = x.Active,
-			//		Image = x.Image,
-			//		CategoryIds = x.categoryIds,
-			//		Stock = x.Stock
-			//	});
 
 			if (item == null)
 				return null;
@@ -281,7 +265,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 		{
 			var parameters = new DynamicParameters();
 
-			var Items = _dapper.GetAll<CategoryEntityModel>($"exec [CategorySelectAll]", parameters, commandType: CommandType.Text);
+			var Items = _dapper.GetAll<CategoryEntityModel>($"exec [GetAllCategory]", parameters, commandType: CommandType.Text);
 
 			if (Items == null)
 				return null;

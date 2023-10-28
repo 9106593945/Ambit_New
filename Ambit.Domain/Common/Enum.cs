@@ -73,4 +73,12 @@ namespace Ambit.Domain.Common
 		public const string Rejected = "rejected";
 		public const string DocumentError = "document_error";
 	}
+
+	public enum CustomerType
+	{
+		[Display(Name = "Dealer")]
+		Dealer = 0,
+		[Display(Name = "Customer")]
+		Customer = 2,
+	}
 }

@@ -1,7 +1,9 @@
 using Ambit.API.Helpers;
 using Ambit.AppCore.Common;
 using Ambit.AppCore.Models;
+using Ambit.AppCore.Repositories;
 using Ambit.Infrastructure.Persistence;
+using Ambit.Infrastructure.Persistence.Repositories;
 using Ambit.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -78,9 +80,9 @@ builder.Services.AddSwaggerGen(setup =>
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IDapper, Dapperr>();
 builder.Services.AddScoped<IRepoSupervisor, RepoSupervisor>();
+builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-
-builder.Services.AddTransient<IUserService, userService>();
+builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IRepoSupervisor, RepoSupervisor>();
 builder.Services.AddTransient<IitemService, itemService>();
 builder.Services.AddTransient<IBannerService, BannerService>();

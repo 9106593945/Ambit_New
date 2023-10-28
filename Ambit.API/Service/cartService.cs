@@ -2,6 +2,8 @@
 using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
 using Ambit.AppCore.Models;
+using Ambit.Domain.Common;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace Ambit.Services
@@ -26,8 +28,6 @@ namespace Ambit.Services
 			CartEntityModel CartEntity = new CartEntityModel();
 			CartEntity = _repoSupervisor.Cart.GetCartById(Id);
 			CartEntity.CartItems = _repoSupervisor.Cart.GetCartItemsByCartId(Id);
-			//CartEntity.SubTotal = CartEntity.CartItems.Sum(x => x.Amount);
-
 			return CartEntity;
 		}
 
@@ -234,7 +234,7 @@ namespace Ambit.Services
 			return _repoSupervisor.Cart.GetSerchItems(term);
 		}
 
-		public bool AddCartItems(CartItemEntityModel CartItemEntity)
+		public ObjectResult AddCartItems(CartItemEntityModel CartItemEntity)
 		{
 			try
 			{
@@ -242,59 +242,99 @@ namespace Ambit.Services
 				if (CartItems != null)
 				{
 					_repoSupervisor.Complete();
-					return true;
+					return Utils.GetObjectResult(200, new CommonAPIReponse<string>
+					{
+						Message = "Item added successfully.",
+						Status = 200
+					});
 				}
 			}
 			catch (Exception ex)
 			{
-				var error = ex.InnerException;
-				return false;
+				return Utils.GetObjectResult(400, new CommonAPIReponse<string>
+				{
+					Message = "Item not added in cart.",
+					Status = 400,
+					Error = ex.Message
+				});
 			}
-			return false;
+			return Utils.GetObjectResult(400, new CommonAPIReponse<string>
+			{
+				Message = "Item not added in cart.",
+				Status = 400
+			});
 		}
 
-		public bool UpdateCartItems(CartItemEntityModel CartItemEntity)
+		public ObjectResult UpdateCartItems(CartItemEntityModel CartItemEntity)
 		{
 			try
 			{
 				if (_repoSupervisor.Cart.UpdateCartItems(CartItemEntity))
 				{
 					_repoSupervisor.Complete();
-					return true;
+					return Utils.GetObjectResult(200, new CommonAPIReponse<string>
+					{
+						Message = "Item update successfully.",
+						Status = 200
+					});
 				}
 			}
 			catch (Exception ex)
 			{
-				var error = ex.InnerException;
-				return false;
+				return Utils.GetObjectResult(400, new CommonAPIReponse<string>
+				{
+					Message = "Item not updated in cart.",
+					Status = 400,
+					Error = ex.Message
+				});
 			}
-			return false;
+			return Utils.GetObjectResult(400, new CommonAPIReponse<string>
+			{
+				Message = "Item not updated in cart.",
+				Status = 400
+			});
 		}
 
-		public bool DeleteCartItems(long id)
+		public ObjectResult DeleteCartItems(long id)
 		{
 			try
 			{
 				if (_repoSupervisor.Cart.DeleteCartItemsByCartItemId(id))
 				{
 					_repoSupervisor.Complete();
-					return true;
+					return Utils.GetObjectResult(200, new CommonAPIReponse<string>
+					{
+						Message = "Item delete from cart successfully.",
+						Status = 200
+					});
 				}
-				return false;
+				return Utils.GetObjectResult(400, new CommonAPIReponse<string>
+				{
+					Message = "Item not delete from cart.",
+					Status = 400
+				});
 			}
 			catch (Exception ex)
 			{
-				var error = ex.InnerException;
-				return false;
+				return Utils.GetObjectResult(400, new CommonAPIReponse<string>
+				{
+					Message = "Item not delete from cart.",
+					Status = 400,
+					Error = ex.Message
+				});
 			}
 		}
 
-		public List<CartItemEntityModel> getCustomerCartDetailsById(int customerId)
+		public ObjectResult getCustomerCartDetailsById(int customerId)
 		{
-			return _repoSupervisor.Cart.getCustomerCartDetailsById(customerId);
+			return Utils.GetObjectResult(200, new CommonAPIReponse<List<CartItemEntityModel>>
+			{
+				Data = _repoSupervisor.Cart.getCustomerCartDetailsById(customerId),
+				Status = 200
+			});
 		}
 
-		public int UpsertCart(CartItemEntityModel cartItemEntityModel)
+		public ObjectResult UpsertCart(CartItemEntityModel cartItemEntityModel)
 		{
 			try
 			{
@@ -306,12 +346,16 @@ namespace Ambit.Services
 					if (CartItems != null)
 					{
 						_repoSupervisor.Complete();
-						return 1;
+						return Utils.GetObjectResult(200, new CommonAPIReponse<string>()
+						{
+							Message = "Cart update successfully.",
+							Status = 200
+						});
 					}
 				}
 				else
 				{
-					CartEntityModel cartEntityModel = new CartEntityModel()
+					CartEntityModel cartEntityModel = new()
 					{
 						customerloginid = cartItemEntityModel.customerloginid
 					};
@@ -323,18 +367,30 @@ namespace Ambit.Services
 					if (CartItems != null)
 					{
 						_repoSupervisor.Complete();
-						return 1;
+						return Utils.GetObjectResult(200, new CommonAPIReponse<string>()
+						{
+							Message = "Cart update successfully.",
+							Status = 200
+						});
 					}
 				}
-				return 0;
+				return Utils.GetObjectResult(400, new CommonAPIReponse<string>()
+				{
+					Message = "Invalid request.",
+					Status = 400
+				});
 			}
 			catch (Exception ex)
 			{
-				var error = ex.InnerException;
-				return 0;
+				return Utils.GetObjectResult(400, new CommonAPIReponse<string>()
+				{
+					Message = "Invalid request.",
+					Status = 400,
+					Error = ex.Message
+				});
 			}
 		}
-		public int IsCartExist(int customerloginid)
+		private int IsCartExist(int customerloginid)
 		{
 			return _repoSupervisor.Cart.IsCartExist(customerloginid);
 		}

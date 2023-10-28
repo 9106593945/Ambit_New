@@ -56,4 +56,13 @@ namespace Ambit.AppCore.EntityModels
 		public decimal Discount { get; set; }
 		public decimal Mrp { get; set; }
 	}
+
+	public class CategoryItemRequest
+	{
+		public int CategoryId { get; set; }
+		public int CustomerId { get; set; }
+		public int CustomerLoginId { get; set; }
+		public int? PageSize { get; set; }
+		public int? PageIndex { get; set; }
+	}
 }

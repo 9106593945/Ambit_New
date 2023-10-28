@@ -11,9 +11,7 @@ using System.Text;
 
 namespace Ambit.API.Controllers
 {
-	[ApiController]
-	[Route("[controller]")]
-	public class AccountController : ControllerBase
+	public class AccountController : BaseAPIController
 	{
 		private readonly ILogger<AccountController> _logger;
 		private readonly IUserService _userService;
@@ -30,64 +28,55 @@ namespace Ambit.API.Controllers
 		[AllowAnonymous]
 		[Route("Authenticate")]
 		[HttpPost]
-		public IActionResult Post([FromForm] LoginRequestModel loginRequest)
+		public IActionResult Post([FromBody] LoginRequestModel loginRequest)
 		{
 			if (!ModelState.IsValid)
 			{
 				return BadRequest();
 			}
-			var user = _userService.GetCustomerLoginByUserName(loginRequest.userName);
+			var user = _userService.GetCustomerLoginByUserName(loginRequest.UserName);
+			string Message = "";
+			_logger.LogInformation("Authenticate API calling :: ", loginRequest.UserName);
 
-			var authenticated = false; string Message = "";
-			_logger.LogInformation("Authenticate API calling :: ", loginRequest.userName);
 			if (user != null)
 			{
-				if (user.Password == loginRequest.password && user.isApproved && (user.customerId == 0 || user.deviceId == loginRequest.deviceid))
+				if (user.Password == loginRequest.Password && user.isApproved && (user.customerId == 0 || user.deviceId == loginRequest.DeviceId))
 				{
-					user.Token = generateJwtToken(user);
-					authenticated = true;
+					user.Token = GenerateJwtToken(user);
+					user.Password = "";
+					return Ok(new CommonAPIReponse<UserApiModel>()
+					{
+						Data = user,
+						Message = Message,
+						Status = 200
+					});
 				}
-				else if (user.Password == loginRequest.password && !user.isApproved)
+				else if (user.Password == loginRequest.Password && !user.isApproved)
 				{
-					authenticated = false;
 					Message = "Sorry! You are not authorized, Please contact to administrator.";
 				}
-				else if (user.Password == loginRequest.password && user.isApproved && user.deviceId != loginRequest.deviceid)
+				else if (user.Password == loginRequest.Password && user.isApproved && user.deviceId != loginRequest.DeviceId)
 				{
-					authenticated = false;
 					Message = "Please login from your Registerd device.";
 				}
 				else
 				{
-					authenticated = false;
 					Message = "Please enter your valid Password.";
 				}
 			}
 			else
 			{
-				authenticated = false;
 				Message = "Please enter your valid Mobile Number.";
-
 			}
 
-			if (authenticated)
-			{
-				user.Password = "";
-				return Ok(new CommonAPIReponse<UserApiModel>()
-				{
-					data = user,
-					Message = Message,
-					Success = authenticated
-				});
-			}
 			return Ok(new CommonAPIReponse<string>()
 			{
 				Message = Message,
-				Success = authenticated
+				Status = 400
 			});
 		}
 
-		private string generateJwtToken(UserApiModel user)
+		private string GenerateJwtToken(UserApiModel user)
 		{
 			// generate token that is valid for 7 days
 			var tokenHandler = new JwtSecurityTokenHandler();
@@ -97,7 +86,7 @@ namespace Ambit.API.Controllers
 				Subject = new ClaimsIdentity(new[] {
 					new Claim("id", user.customerId.HasValue ? user.customerId.Value.ToString() : ""),
 					new Claim(ClaimTypes.Sid, user.Id.ToString()),
-					new Claim(ClaimTypes.Name, user.Id.ToString()),
+					new Claim(ClaimTypes.Name, user.Name.ToString()),
 					new Claim(ClaimTypes.Role, "API")
 				}),
 				Expires = DateTime.UtcNow.AddHours(_appSettings.TokenExpireTime ?? 24),
@@ -106,6 +95,5 @@ namespace Ambit.API.Controllers
 			var token = tokenHandler.CreateToken(tokenDescriptor);
 			return tokenHandler.WriteToken(token);
 		}
-
 	}
 }

@@ -20,7 +20,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 		{
 			var login = _dbContext.Users.Where(x => x.UserName == userName && x.Password == password).FirstOrDefault();
 			if (login == null)
-				return null;
+				return new UserApiModel();
 
 			//Update login time...
 			login.Last_Login = DateTime.Now;
@@ -30,18 +30,18 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public UserApiModel GetCustomerLoginByUserName(string userName)
 		{
-			var login = _dbContext.CustomerLogin.Where(x => x.username == userName && x.isDeleted == false).FirstOrDefault();
+			var login = _dbContext.CustomerLogin.Where(x => x.Username == userName && x.isDeleted == false).FirstOrDefault();
 			if (login == null)
 				return null;
 
 			return new UserApiModel()
 			{
-				Id = login.customerloginid,
-				customerId = login.customerid,
-				Name = login.name,
-				isApproved = login.isapproved,
-				Password = login.password,
-				deviceId = login.deviceid
+				Id = login.Customerloginid,
+				customerId = login.Customerid,
+				Name = login.Name,
+				isApproved = login.Isapproved,
+				Password = login.Password,
+				deviceId = login.Deviceid
 			};
 		}
 
@@ -65,16 +65,17 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 			};
 		}
 
-		public EntityEntry<CustomerLogin> RegisterCustomer(RegisterRequestModel registerRequest)
+		public EntityEntry<CustomerLogin> RegisterCustomer(int parentId, RegisterRequestModel registerRequest)
 		{
 			var CustomerLogin = _dbContext.CustomerLogin.Add(new CustomerLogin
 			{
-				deviceid = registerRequest.deviceId,
-				name = registerRequest.name,
-				username = registerRequest.username,
-				password = registerRequest.password,
-				invitationcode = registerRequest.invitationcode,
-				type = registerRequest.type,
+				Deviceid = registerRequest.DeviceId,
+				Name = registerRequest.Name,
+				Username = registerRequest.username,
+				Password = registerRequest.Password,
+				Invitationcode = registerRequest.InvitationCode,
+				Type = registerRequest.Type,
+				ParentId = parentId
 				//customerid = registerRequest.customerId
 			});
 
@@ -93,6 +94,5 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 				Name = login.Name
 			};
 		}
-
 	}
 }

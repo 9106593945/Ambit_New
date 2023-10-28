@@ -18,9 +18,9 @@ namespace Ambit.API.Controllers
 		{
 			CommonAPIReponse<IEnumerable<BannerEntityModel>> response = new()
 			{
-				data = _bannerService.GetAllBanners(),
+				Data = _bannerService.GetAllBanners(),
 				Message = "Banners get successfully",
-				Success = true
+				Status = 200
 			};
 			return Ok(response);
 		}

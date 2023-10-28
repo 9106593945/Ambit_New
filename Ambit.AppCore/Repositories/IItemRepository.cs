@@ -6,7 +6,7 @@ namespace Ambit.AppCore.Repositories
 {
 	public interface IItemRepository
 	{
-		IEnumerable<ItemEntityModel> GetAllItems(int categoryid, int customerid, int customerLoginId);
+		IEnumerable<ItemEntityModel> GetAllItems(CategoryItemRequest request);
 		IEnumerable<ItemEntityModel> GetAllItemsBySearchCrieteria(JDatatableParameters searchParams, out int TotalCount);
 		ItemEntityModel GetItemById(int Id, int customerId);
 		bool UpdateItem(ItemEntityModel itemEntityModel);

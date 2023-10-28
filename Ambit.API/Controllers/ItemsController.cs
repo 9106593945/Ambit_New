@@ -24,15 +24,14 @@ namespace Ambit.API.Controllers
 		}
 
 
-		[Route("GetAllItems")]
-		[HttpPost]
-		public IActionResult GetAllItems([FromForm] int categoryid, [FromForm] int customerid, [FromForm] int customerLoginId)
+		[HttpGet]
+		public IActionResult Get([FromQuery] CategoryItemRequest request)
 		{
 			IEnumerable<ItemEntityModel> CategoryItems = _itemService.GetAllItems(categoryid, customerid, customerLoginId);
 
 			var response = new CommonAPIReponse<dynamic>()
 			{
-				data = CategoryItems.Select(s => new
+				Data = CategoryItems.Select(s => new
 				{
 					Code = s.Code,
 					Image = s.Image,
@@ -42,10 +41,11 @@ namespace Ambit.API.Controllers
 					ItemId = s.ItemId,
 					Name = s.Name,
 					IsFavorite = s.IsFavorite,
-					SellAmount = s.SellAmount
+					SellAmount = s.SellAmount,
+					DefaultAddQty = 1
 				}).ToList(),
 				Message = "Items retrived successfully.",
-				Success = true
+				Status = 200
 			};
 			return Ok(response);
 		}

@@ -19,24 +19,19 @@ namespace Ambit.API.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Get([FromForm] int customerId)
+		public IActionResult Get(int id)
 		{
-			var cartItems = _CartService.getCustomerCartDetailsById(customerId);
-			var response = new CommonAPIReponse<List<CartItemEntityModel>>() { Success = true, Message = "", data = cartItems };
-
-			return new OkObjectResult(response);
+			return _CartService.getCustomerCartDetailsById(id);
 		}
 
 		[HttpPost]
 		public IActionResult UpsertCart([FromBody] CartItemEntityModel cartItemEntityModel)
 		{
-			var cartItems = _CartService.UpsertCart(cartItemEntityModel);
-
-			return new OkObjectResult(cartItems);
+			return _CartService.UpsertCart(cartItemEntityModel);
 		}
 
 		[HttpDelete]
-		public IActionResult Delete([FromForm] int id)
+		public IActionResult Delete(int id)
 		{
 			var delte = _CartService.DeleteCart(id);
 			return new OkObjectResult(delte);

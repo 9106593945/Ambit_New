@@ -15,7 +15,7 @@ namespace Ambit.AppCore.Repositories
 		UserApiModel GetLoginByEmailAndPasswordAndUpdateLastLoginTime(string email, string password);
 		UserApiModel GetLoginById(long userId);
 		UserApiModel GetCustomerLoginByUserName(string userName);
-		EntityEntry<CustomerLogin> RegisterCustomer(RegisterRequestModel registerRequest);
+		EntityEntry<CustomerLogin> RegisterCustomer(int parentid, RegisterRequestModel registerRequest);
 		UserApiModel GetCustomerByUserName(string userName);
 	}
 }

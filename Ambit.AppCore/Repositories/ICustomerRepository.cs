@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Ambit.AppCore.Repositories
 {
-	public interface ICustomerRepository
+	public interface ICustomerRepository : IGenericRepository<CustomerLogin>
 	{
 		IEnumerable<CustomerEntityModel> GetAllCustomers();
 		CustomerEntityModel GetCustomerById(int Id);
@@ -20,6 +20,7 @@ namespace Ambit.AppCore.Repositories
 		IEnumerable<CustomerLoginModel> GetAllCustomerLogin();
 		bool ActiveInactiveCustomerLogin(long id, bool status);
 		bool ApprovedCustomerLogin(long id, bool status);
-		bool UpdateCustomerToLogin(long id, long customerId, string name, string userName, string Password);
+		bool UpdateCustomerToLogin(long id, int customerId, string name, string userName, string Password);
+		long GetCustomerIdFromInvitationCode(string invitationCode);
 	}
 }

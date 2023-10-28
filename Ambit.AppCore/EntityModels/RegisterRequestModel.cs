@@ -5,15 +5,15 @@ namespace Ambit.AppCore.EntityModels
 	public class RegisterRequestModel
 	{
 		[Required(ErrorMessage = "Please enter Name")]
-		public string name { get; set; }
+		public string Name { get; set; }
 		[Required(ErrorMessage = "Please enter Password")]
-		public string password { get; set; }
+		public string Password { get; set; }
 		[Required(ErrorMessage = "Please enter Device Id")]
-		public string deviceId { get; set; }
+		public string DeviceId { get; set; }
 		[Required(ErrorMessage = "Please enter User Name")]
 		public string username { get; set; }
-		public string invitationcode { get; set; }
-		public string type { get; set; }
+		public string InvitationCode { get; set; }
+		public string Type { get; set; }
 		//public long customerId { get; set; }
 	}
 }

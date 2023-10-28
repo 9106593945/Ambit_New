@@ -25,7 +25,7 @@ namespace Ambit.API.Controllers
 
 			var response = new CommonAPIReponse<dynamic>()
 			{
-				data = CategoryItems.Select(s => new
+				Data = CategoryItems.Select(s => new
 				{
 					s.Name,
 					s.Description,
@@ -34,7 +34,7 @@ namespace Ambit.API.Controllers
 					s.CategoryId
 				}).ToList(),
 				Message = "Category retrived successfully.",
-				Success = true
+				Status = 200
 			};
 
 			return Ok(response);
