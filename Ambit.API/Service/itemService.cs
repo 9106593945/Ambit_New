@@ -16,9 +16,9 @@ namespace Ambit.Services
 			_repoSupervisor = repoSupervisor;
 		}
 
-		public IEnumerable<ItemEntityModel> GetAllItems(int categoryid, int customerid, int customerLoginId)
+		public IEnumerable<ItemEntityModel> GetAllItems(CategoryItemRequest request)
 		{
-			return _repoSupervisor.Items.GetAllItems(categoryid, customerid, customerLoginId);
+			return _repoSupervisor.Items.GetAllItems(request);
 		}
 
 		public IEnumerable<ItemEntityModel> GetAllItemsBySearchCrieteria(JDatatableParameters searchParams, out int TotalCount)
@@ -75,12 +75,12 @@ namespace Ambit.Services
 
 		public IEnumerable<CategoryEntityModel> GetAllCategory()
 		{
-			var favoriteItems = _repoSupervisor.Items.GetAllCategory();
-			favoriteItems = favoriteItems
-					  .Select(c => { c.ImagePath = _appSettings.SiteUrl + "/images/items/resize/" + c.Image; return c; })
+			var category = _repoSupervisor.Items.GetAllCategory();
+			category = category
+					  .Select(c => { c.ImagePath = _appSettings.SiteUrl + "/images/category/resize/" + c.ImagePath; return c; })
 					  .Where(a => a.Active == true)
 					  .ToList();
-			return favoriteItems;
+			return category;
 		}
 	}
 }

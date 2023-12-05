@@ -1,18 +1,17 @@
 ﻿using Ambit.API.Helpers;
 using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
-using Ambit.AppCore.Models;
 using Ambit.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace Ambit.Services
 {
-	public class CartService : ICartService
+	public class OrderService : IOrderService
 	{
 		private readonly AppSettings _appSettings;
 		private readonly IRepoSupervisor _repoSupervisor;
-		public CartService(IOptions<AppSettings> appSettings, IRepoSupervisor repoSupervisor)
+		public OrderService(IOptions<AppSettings> appSettings, IRepoSupervisor repoSupervisor)
 		{
 			_appSettings = appSettings.Value;
 			_repoSupervisor = repoSupervisor;

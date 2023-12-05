@@ -27,7 +27,7 @@ namespace Ambit.API.Controllers
 		[HttpGet]
 		public IActionResult Get([FromQuery] CategoryItemRequest request)
 		{
-			IEnumerable<ItemEntityModel> CategoryItems = _itemService.GetAllItems(categoryid, customerid, customerLoginId);
+			IEnumerable<ItemEntityModel> CategoryItems = _itemService.GetAllItems(request);
 
 			var response = new CommonAPIReponse<dynamic>()
 			{
@@ -35,9 +35,9 @@ namespace Ambit.API.Controllers
 				{
 					Code = s.Code,
 					Image = s.Image,
-					ImagePath = s.ImagePath,
+					ImagePath = _appSettings.SiteUrl + "/images/items/resize/" + (!string.IsNullOrEmpty(s.Image) ? s.Image : "no-image.png"),
 					Description = s.Description,
-					FavoriteItemId = s.favoriteitemId,
+					FavoriteItemId = s.FavoriteItemId,
 					ItemId = s.ItemId,
 					Name = s.Name,
 					IsFavorite = s.IsFavorite,
@@ -54,7 +54,11 @@ namespace Ambit.API.Controllers
 		public IActionResult ItemsInfo(int id, int customerid)
 		{
 			ItemEntityModel itemDetail = _itemService.GetItemByID(id, customerid);
-			itemDetail.ImagePath = "/images/items/resize/" + (!string.IsNullOrEmpty(itemDetail.Image) ? itemDetail.Image : "no-image.png");
+			itemDetail.ProductImages.Add(new ProductImage
+			{
+				Id = 1,
+				ImagePath = _appSettings.SiteUrl + "/images/items/resize/" + (!string.IsNullOrEmpty(itemDetail.Image) ? itemDetail.Image : "no-image.png")
+			});
 			return Ok(itemDetail);
 		}
 	}

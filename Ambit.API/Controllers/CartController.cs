@@ -19,13 +19,19 @@ namespace Ambit.API.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Get(int id)
+		public IActionResult Get()
 		{
-			return _CartService.getCustomerCartDetailsById(id);
+			return _CartService.GetCustomerCartDetailsById();
 		}
 
 		[HttpPost]
 		public IActionResult UpsertCart([FromBody] CartItemEntityModel cartItemEntityModel)
+		{
+			return _CartService.UpsertCart(cartItemEntityModel);
+		}
+		
+		[HttpPatch]
+		public IActionResult UpdateCartItem([FromBody] CartItemEntityModel cartItemEntityModel)
 		{
 			return _CartService.UpsertCart(cartItemEntityModel);
 		}

@@ -35,57 +35,70 @@ namespace Ambit.Services
 
 		public ObjectResult RegisterCustomerLogin(RegisterRequestModel registerRequest)
 		{
-			var user = _repoSupervisor.Logins.GetCustomerLoginByUserName(registerRequest.username);
-			if (user != null && user.Id > 0)
+			try
 			{
-				return Utils.GetObjectResult(400, new CommonAPIReponse<string>()
+				var user = _repoSupervisor.Logins.GetCustomerLoginByUserName(registerRequest.username);
+				if (user != null && user.Id > 0)
 				{
-					Error = "You are already registerd.",
-					Status = 400,
-					Message = "You are already registerd."
-				});
-			}
+					return Utils.GetObjectResult(400, new CommonAPIReponse<string>()
+					{
+						Error = "You are already registerd.",
+						Status = 400,
+						Message = "You are already registerd."
+					});
+				}
 
-			long customerLoginId;
-			if (_appSettings.DefaultInvitationCode == registerRequest.InvitationCode)
-			{
-				customerLoginId = 0;
-				registerRequest.Type = nameof(CustomerType.Dealer);
-			}
-			else
-			{
-				customerLoginId = _repoSupervisor.Customer.GetCustomerIdFromInvitationCode(registerRequest.InvitationCode);
-				registerRequest.Type = nameof(CustomerType.Customer);
-			}
-			if (customerLoginId == 0)
-			{
-				return Utils.GetObjectResult(400, new CommonAPIReponse<string>()
+				long customerLoginId;
+				if (_appSettings.DefaultInvitationCode == registerRequest.InvitationCode)
 				{
-					Error = "Invalid Invitation Code.",
-					Status = 400,
-					Message = "Invalid Invitation Code."
-				});
-			}
-			do
-			{
-				registerRequest.InvitationCode = ExtensionMethods.GenerateRandomOtp(6);
-			} while (_repoSupervisor.Customer.GetCustomerIdFromInvitationCode(registerRequest.InvitationCode) > 0);
+					customerLoginId = 0;
+					registerRequest.Type = nameof(CustomerType.Dealer);
+				}
+				else
+				{
+					registerRequest.Type = nameof(CustomerType.Customer);
+					customerLoginId = _repoSupervisor.Customer.GetCustomerIdFromInvitationCode(registerRequest.InvitationCode);
 
-			var customerLogin = _repoSupervisor.Logins.RegisterCustomer(Convert.ToInt16(customerLoginId), registerRequest);
-			_repoSupervisor.Complete();
+					if (customerLoginId == 0)
+					{
+						return Utils.GetObjectResult(400, new CommonAPIReponse<string>()
+						{
+							Error = "Invalid Invitation Code.",
+							Status = 400,
+							Message = "Invalid Invitation Code."
+						});
+					}
+				}
+				do
+				{
+					registerRequest.InvitationCode = ExtensionMethods.GenerateRandomOtp(6);
+				} while (_repoSupervisor.Customer.GetCustomerIdFromInvitationCode(registerRequest.InvitationCode) > 0);
 
-			if (customerLogin.Entity.Customerloginid > 0)
+				var customerLogin = _repoSupervisor.Logins.RegisterCustomer(Convert.ToInt16(customerLoginId), registerRequest);
+
+				if (customerLogin.Entity.Customerloginid > 0)
+					return Utils.GetObjectResult(200, new CommonAPIReponse<string>()
+					{
+						Message = "Customer registered successfully.",
+						Status = 200
+					});
+
 				return Utils.GetObjectResult(200, new CommonAPIReponse<string>()
 				{
-					Message = "Customer registered successfully.",
-					Status = 200
+					Message = "Customer not registered. Contact administrator.",
+					Status = 400
 				});
 
-			return Utils.GetObjectResult(200, new CommonAPIReponse<string>()
+			}
+			catch (Exception e)
 			{
-				Message = "Customer not registered. Contact administrator.",
-				Status = 400
-			});
+				return Utils.GetObjectResult(200, new CommonAPIReponse<string>()
+				{
+					Message = "Invalid request.",
+					Status = 400,
+					Error = e.Message + " : " + e.StackTrace + " " + e.InnerException
+				}); ;
+			}
 		}
 
 		public UserApiModel GetCustomerByUserName(string userName)

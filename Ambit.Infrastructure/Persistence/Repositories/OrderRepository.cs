@@ -7,14 +7,13 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Ambit.Infrastructure.Persistence.Repositories
 {
-	public class CartRepository : BaseRepository, ICartRepository
+	public class OrderRepository : BaseRepository, IOrderRepository
 	{
 		private readonly IDapper _dapper;
-		public CartRepository(AppDbContext dbContext, IDapper dapper) : base(dbContext)
+		public OrderRepository(AppDbContext dbContext, IDapper dapper) : base(dbContext)
 		{
 			_dapper = dapper;
 		}
-
 		public AppDbContext AppDbContext
 		{
 			get { return _dbContext as AppDbContext; }
@@ -36,12 +35,11 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 
 		public EntityEntry<cart> AddNewCart(CartEntityModel CartEntity)
 		{
-			var Cart = _dbContext.Cart
-						.Add(new cart
-						{
-							customerloginid = CartEntity.customerloginid,
-							customername = "",
-						});
+			var Cart = _dbContext.Cart.Add(new cart
+			{
+				customerloginid = CartEntity.customerloginid,
+				customername = "",
+			});
 			return Cart;
 		}
 

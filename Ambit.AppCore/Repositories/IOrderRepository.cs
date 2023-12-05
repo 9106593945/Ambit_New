@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Ambit.AppCore.Repositories
 {
-	public interface ICartRepository
+	public interface IOrderRepository
 	{
 		bool UpdateCart(CartEntityModel CartEntityModel);
 		EntityEntry<cart> AddNewCart(CartEntityModel CartEntityModel);

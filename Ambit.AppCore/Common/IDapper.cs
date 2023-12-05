@@ -4,7 +4,7 @@ using System.Data.Common;
 
 namespace Ambit.AppCore.Common
 {
-	public interface IDapper : IDisposable
+	public interface IDapper : IDisposable 
 	{
 		DbConnection GetDbconnection();
 		T Get<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure);

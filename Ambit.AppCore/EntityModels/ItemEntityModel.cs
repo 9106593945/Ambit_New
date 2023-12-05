@@ -5,13 +5,14 @@ namespace Ambit.AppCore.EntityModels
 {
 	public class ItemEntityModel : BaseEntityModel
 	{
-		public long? favoriteitemId { get; set; }
+		public long? FavoriteItemId { get; set; }
 		public long? ItemId { get; set; }
 		[Required]
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public string Image { get; set; }
-		public string ImagePath { get; set; }
+		public List<string> ImagePath { get; set; } = new();
+		public List<ProductImage> ProductImages { get; set; } = new();
 		public IFormFile file { get; set; }
 		public string Code { get; set; }
 		public string Supplier { get; set; }
@@ -36,6 +37,12 @@ namespace Ambit.AppCore.EntityModels
 		public int TotalCount { get; set; }
 		public List<ComboProductSubItemEntity> SubItems { get; set; }
 
+	}
+
+	public class ProductImage
+	{
+		public int Id { get; set; }
+		public string ImagePath { get; set; } = string.Empty;
 	}
 
 	public class ComboProductSubItemEntity : BaseEntityModel

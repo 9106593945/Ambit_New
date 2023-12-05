@@ -4,7 +4,7 @@ namespace Ambit.AppCore.Models
 {
 	public interface IitemService
 	{
-		IEnumerable<ItemEntityModel> GetAllItems(int categoryid, int customerid, int customerLoginId);
+		IEnumerable<ItemEntityModel> GetAllItems(CategoryItemRequest request);
 		IEnumerable<ItemEntityModel> GetAllItemsBySearchCrieteria(JDatatableParameters searchParams, out int TotalCount);
 
 		ItemEntityModel GetItemByID(int Id, int customerId = 0);

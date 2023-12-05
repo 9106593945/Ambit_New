@@ -19,6 +19,7 @@ namespace Ambit.Infrastructure.Persistence
 		public ICategoryRepository Category { get; private set; }
 		public ICustomerRepository Customer { get; private set; }
 		public ICartRepository Cart { get; private set; }
+		public IOrderRepository Order { get; private set; }
 		public IHomeRepository Home { get; private set; }
 		public IBannerRepository Banner { get; private set; }
 		public ICodelistRepository Codelist { get; private set; }
@@ -34,6 +35,7 @@ namespace Ambit.Infrastructure.Persistence
 			Company = new ComapnyRepository(_dbContext);
 			Customer = new CustomerRepository(_dbContext, _dapper);
 			Cart = new CartRepository(_dbContext, _dapper);
+			Order = new OrderRepository(_dbContext, _dapper);
 			Home = new HomeRepository(_dbContext);
 			Category = new CategoryRepository(_dbContext);
 			Banner = new BannerRepository(_dbContext, _dapper);
@@ -49,7 +51,8 @@ namespace Ambit.Infrastructure.Persistence
 		private void AddTimestamps(string username)
 		{
 			var entities = _dbContext.ChangeTracker
-						.Entries().Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+						.Entries()
+						.Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
 
 			username = username ?? "System";
 

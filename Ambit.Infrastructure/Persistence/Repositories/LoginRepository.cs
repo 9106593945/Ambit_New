@@ -75,10 +75,15 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 				Password = registerRequest.Password,
 				Invitationcode = registerRequest.InvitationCode,
 				Type = registerRequest.Type,
-				ParentId = parentId
+				ParentId = parentId,
+				Created_On = DateTime.UtcNow,
+				Updated_On = DateTime.UtcNow,
+				Active = true,
+				Created_By = 0,
+				Updated_By = 0
 				//customerid = registerRequest.customerId
 			});
-
+			_dbContext.SaveChanges();
 			return CustomerLogin;
 		}
 

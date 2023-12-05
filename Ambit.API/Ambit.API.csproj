@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Ambit.Infrastructure\Ambit.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Service\" />
-  </ItemGroup>
-
 </Project>
