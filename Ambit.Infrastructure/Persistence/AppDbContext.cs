@@ -1,4 +1,5 @@
-﻿using Ambit.Domain.Entities;
+﻿using Ambit.AppCore.EntityModels;
+using Ambit.Domain.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -65,8 +66,10 @@ namespace Ambit.Infrastructure.Persistence
 		public DbSet<cartitems> CartItems { get; set; }
 		public DbSet<ViewAllItems> ViewAllItems { get; set; }
 		public DbSet<ViewAllCustomerLogin> ViewAllCustomerLogin { get; set; }
+        public DbSet<OrderItems> OrderItems { get; set; }
+        public DbSet<Order> Order { get; set; }
 
-		protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder builder)
 		{
 			//builder.Entity<Items>().HasKey(o => o.itemid);
 			builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

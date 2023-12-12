@@ -13,6 +13,7 @@ namespace Ambit.AppCore.Common
 		IHomeRepository Home { get; }
 		IBannerRepository Banner { get; }
 		ICodelistRepository Codelist { get; }
+        IOrderRepository Order { get; }
 		int Complete(string username = null);
 
 	}

@@ -87,6 +87,7 @@ builder.Services.AddTransient<IRepoSupervisor, RepoSupervisor>();
 builder.Services.AddTransient<IitemService, itemService>();
 builder.Services.AddTransient<IBannerService, BannerService>();
 builder.Services.AddTransient<ICartService, CartService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
 
 var app = builder.Build();
 

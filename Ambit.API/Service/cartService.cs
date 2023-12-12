@@ -12,11 +12,13 @@ namespace Ambit.Services
 	{
 		private readonly AppSettings _appSettings;
 		private readonly IRepoSupervisor _repoSupervisor;
-		public CartService(IOptions<AppSettings> appSettings, IRepoSupervisor repoSupervisor)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public CartService(IOptions<AppSettings> appSettings, IRepoSupervisor repoSupervisor, IHttpContextAccessor httpContextAccessor)
 		{
 			_appSettings = appSettings.Value;
 			_repoSupervisor = repoSupervisor;
-		}
+            _httpContextAccessor = httpContextAccessor;
+        }
 
 		public bool DeleteCart(long id)
 		{
@@ -120,7 +122,7 @@ namespace Ambit.Services
 		{
 			return Utils.GetObjectResult(200, new CommonAPIReponse<List<CartItemEntityModel>>
 			{
-				Data = _repoSupervisor.Cart.GetCartDetailsByCustomerLoginId(customerId),
+				Data = _repoSupervisor.Cart.GetCartDetailsByCustomerLoginId(0),
 				Status = 200
 			});
 		}

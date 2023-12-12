@@ -19,21 +19,31 @@ namespace Ambit.API.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Get()
+        [Route("GetByCustId")]
+        public IActionResult GetByCustId()
 		{
-			return _OrderService.GetCustomerCartDetailsById();
+			return _OrderService.GetOrderDetailsByCustomerLoginId();
 		}
 
 		[HttpPost]
-		public IActionResult Submit([FromBody] CartItemEntityModel cartItemEntityModel)
+        [Route("AddOrder")]
+        public IActionResult AddOrder([FromBody] OrderEntityModel orderEntityModel)
 		{
-			return _OrderService.UpsertCart(cartItemEntityModel);
+			return _OrderService.AddOrder(orderEntityModel);
 		}
 
-		[HttpPatch]
-		public IActionResult ChangeStatus([FromBody] CartItemEntityModel cartItemEntityModel)
+		[HttpGet]
+        [Route("GetByOrderId")]
+        public IActionResult GetByOrderId(int orderId)
 		{
-			return _OrderService.UpsertCart(cartItemEntityModel);
+			return _OrderService.GetByOrderId(orderId);
 		}
+
+		//[HttpPatch]
+  //      [Route("AddOrder")]
+  //      public IActionResult ChangeStatus([FromBody] CartItemEntityModel cartItemEntityModel)
+		//{
+		//	return _OrderService.UpsertCart(cartItemEntityModel);
+		//}
 	}
 }

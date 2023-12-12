@@ -33,33 +33,48 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 			return CartItems;
 		}
 
-		public EntityEntry<cart> AddNewCart(CartEntityModel CartEntity)
+		public EntityEntry<Order> AddOrder(OrderEntityModel orderEntityModel)
 		{
-			var Cart = _dbContext.Cart.Add(new cart
-			{
-				customerloginid = CartEntity.customerloginid,
-				customername = "",
-			});
-			return Cart;
+			var Order = _dbContext.Order.Add(new Order
+            {
+                CustomerId = orderEntityModel.CustomerId,
+                ordernumber = orderEntityModel.ordernumber,
+                description = orderEntityModel.description,
+                customername = orderEntityModel.customername,
+                status = orderEntityModel.status,
+                subtotal = orderEntityModel.subtotal,
+                tax = orderEntityModel.tax,
+                orderdate = orderEntityModel.orderdate,
+                discount = orderEntityModel.discount,
+                shipingcharge = orderEntityModel.shipingcharge,
+                grandtotal = orderEntityModel.grandtotal,
+                shippingaddressid = orderEntityModel.shippingaddressid,
+                billingaddressid = orderEntityModel.billingaddressid,
+                Active = true,
+                isDeleted = orderEntityModel.IsDeleted,
+                Created_On = orderEntityModel.Created_On,
+                Created_By = orderEntityModel.Created_By,
+                Updated_On = orderEntityModel.Updated_On,
+                Updated_By = orderEntityModel.Updated_By
+            });
+			return Order;
 		}
 
-		public EntityEntry<cartitems> AddCartItems(CartItemEntityModel CartItem)
-		{
-			var CartItems = _dbContext.CartItems.Add(new cartitems
-			{
-				itemid = CartItem.ItemId,
-				cartid = CartItem.CartId,
-				quantity = CartItem.Quantity,
-				Active = CartItem.Active,
-				isDeleted = CartItem.IsDeleted,
-				Created_On = CartItem.Created_On,
-				Created_By = CartItem.Created_By,
-				Updated_On = CartItem.Updated_On,
-				Updated_By = CartItem.Updated_By,
-				customerloginid = CartItem.CustomerLoginId,
-			});
+		public EntityEntry<OrderItems> AddOrderItems(OrderItemEntityModel OrderItemEntityModel)
+        {
+			var OrderItems = _dbContext.OrderItems.Add(new OrderItems
+            {
+                orderid = OrderItemEntityModel.OrderId,
+                itemid = OrderItemEntityModel.ItemId,
+                quantity = OrderItemEntityModel.Quantity,
+                price = OrderItemEntityModel.Price,
+                tax = OrderItemEntityModel.Tax,
+                total = OrderItemEntityModel.Total,
+                customerid = OrderItemEntityModel.CustomerId,
+                customername = OrderItemEntityModel.customername
+            });
 
-			return CartItems;
+			return OrderItems;
 		}
 
 		public bool UpdateCart(CartEntityModel CartEntity)
@@ -156,23 +171,32 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 			return items;
 		}
 
-		public List<CartItemEntityModel> GetCartDetailsByCustomerLoginId(int customerloginid)
+		public List<OrderEntityModel> GetOrderDetailsByCustomerLoginId(int customerloginid)
 		{
 			try
 			{
-				var cartDetail = from st in _dbContext.CartItems
-							  join s in _dbContext.Cart on st.cartid equals s.cartid
-							  where s.isDeleted == false && st.isDeleted == false && st.customerloginid == customerloginid
-							  select new CartItemEntityModel
-							  {
-								  Active = st.Active ?? true,
-								  CartId = st.cartid,
-								  ItemId = st.itemid,
-								  Quantity = st.quantity,
-								  Created_On = st.Created_On,
-								  Id = st.id
-							  };
-				return cartDetail.ToList();
+				var orderDetail = from st in _dbContext.Order
+							 // join s in _dbContext.Cart on st.cartid equals s.cartid
+							  where st.CustomerId == customerloginid
+                                  select new OrderEntityModel
+                                  {
+                                      orderid = st.orderid,
+                                      ordernumber = st.ordernumber,
+                                      description = st.description,
+                                      customername = st.customername,
+                                      CustomerId = st.CustomerId,
+                                      status = st.status,
+                                      subtotal = st.subtotal,
+                                      tax = st.tax,
+                                      orderdate = st.orderdate,
+                                      discount = st.discount,
+                                      shipingcharge = st.shipingcharge,
+                                      grandtotal = st.grandtotal,
+                                      shippingaddressid = st.shippingaddressid,
+                                      billingaddressid = st.billingaddressid,
+                                      Active = st.Active
+                                  };
+                return orderDetail.ToList();
 			}
 			catch (Exception ex)
 			{
@@ -206,5 +230,63 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 			}
 		}
 
-	}
+        public OrderEntityModel GetByOrderId(int orderId)
+        {
+            try
+            {
+                var orderDetail = from st in _dbContext.Order
+                                      // join s in _dbContext.Cart on st.cartid equals s.cartid
+                                  where st.orderid == orderId
+                                  select new OrderEntityModel
+                                  {
+                                      orderid = st.orderid,
+                                      ordernumber = st.ordernumber,
+                                      description = st.description,
+                                      customername = st.customername,
+                                      CustomerId = st.CustomerId,
+                                      status = st.status,
+                                      subtotal = st.subtotal,
+                                      tax = st.tax,
+                                      orderdate = st.orderdate,
+                                      discount = st.discount,
+                                      shipingcharge = st.shipingcharge,
+                                      grandtotal = st.grandtotal,
+                                      shippingaddressid = st.shippingaddressid,
+                                      billingaddressid = st.billingaddressid,
+                                      Active = st.Active
+                                  };
+                return orderDetail.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+		public List<OrderItemEntityModel> GetOrderItemsById(int orderId)
+        {
+            try
+            {
+                var orderDetail = from st in _dbContext.OrderItems
+                                      // join s in _dbContext.Cart on st.cartid equals s.cartid
+                                  where st.orderid == orderId
+                                  select new OrderItemEntityModel
+                                  {
+                                      Active = st.Active ?? true,
+                                      OrderId = st.orderid,
+                                      ItemId = st.itemid,
+                                      Quantity = st.quantity,
+                                      Price = st.price,
+                                      Tax = st.tax,
+                                      Total = st.total,
+                                      Created_On = st.Created_On,
+                                      Id = st.id
+                                  };
+                return orderDetail.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+    }
 }

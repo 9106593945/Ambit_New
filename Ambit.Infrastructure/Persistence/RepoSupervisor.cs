@@ -56,13 +56,19 @@ namespace Ambit.Infrastructure.Persistence
 
 			username = username ?? "System";
 
-			var currentUserId = Convert.ToInt32(_httpContextAccessor.HttpContext?.User?.Identity?.Name);
-
-			if (false && currentUserId > 0)
-			{
-				var name = _dbContext.Users.Find(currentUserId)?.Name;
-				username = name ?? username;
-			}
+            var currentUserName = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            //_httpContextAccessor.HttpContext?.User?.Claims
+            var currentUserId = 0;
+            if (!string.IsNullOrWhiteSpace(currentUserName))
+            {
+                var loginusr = _dbContext.CustomerLogin.First(x => x.Name == currentUserName);
+                //var name = _dbContext.Users.Find(currentUserName)?.UserId;
+                if (loginusr != null)
+                {
+                    currentUserId = Convert.ToInt32(loginusr.Customerid);
+					username = loginusr.Name ?? username;
+                }
+            }
 
 			username = username.TrimToMaxLength(40);
 			foreach (var entity in entities)

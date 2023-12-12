@@ -6,8 +6,10 @@ namespace Ambit.AppCore.Models
 	public interface IOrderService
 	{
 		bool DeleteCart(long id);
-		ObjectResult AddCartItems(CartItemEntityModel CartItemEntity);
-		ObjectResult GetCustomerCartDetailsById();
-		ObjectResult UpsertCart(CartItemEntityModel cartItemEntityModel);
+		ObjectResult AddOrder(OrderEntityModel orderEntityModel);
+		ObjectResult GetOrderDetailsByCustomerLoginId();
+		ObjectResult GetByOrderId(int orderId);
+
+        ObjectResult UpsertCart(CartItemEntityModel cartItemEntityModel);
 	}
 }
