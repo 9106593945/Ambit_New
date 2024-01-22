@@ -5,6 +5,7 @@ using Ambit.Domain.Entities;
 using Ambit.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Ambit.Infrastructure.Persistence
 {
@@ -54,9 +55,9 @@ namespace Ambit.Infrastructure.Persistence
 						.Entries()
 						.Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
 
-			username = username ?? "System";
+				username = username ?? "System";
 
-			var currentUserId = Convert.ToInt32(_httpContextAccessor.HttpContext?.User?.Identity?.Name);
+			var currentUserId = Convert.ToInt32(_httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(s=>s.Type == ClaimTypes.Sid).Value);
 
 			if (false && currentUserId > 0)
 			{

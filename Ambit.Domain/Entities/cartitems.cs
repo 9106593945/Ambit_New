@@ -6,7 +6,7 @@ namespace Ambit.Domain.Entities
 	{
 		[Key]
 		public long id { get; set; }
-		public int cartid { get; set; }
+		public long cartid { get; set; }
 		public int itemid { get; set; }
 		public int quantity { get; set; }
 		public int customerloginid { get; set; }

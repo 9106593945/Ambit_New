@@ -25,13 +25,13 @@ namespace Ambit.API.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult UpsertCart([FromBody] CartItemEntityModel cartItemEntityModel)
+		public IActionResult UpsertCart([FromBody] CartItemRequest cartItemEntityModel)
 		{
 			return _CartService.UpsertCart(cartItemEntityModel);
 		}
 		
 		[HttpPatch]
-		public IActionResult UpdateCartItem([FromBody] CartItemEntityModel cartItemEntityModel)
+		public IActionResult UpdateCartItem([FromBody] CartItemRequest cartItemEntityModel)
 		{
 			return _CartService.UpsertCart(cartItemEntityModel);
 		}

@@ -6,8 +6,8 @@ namespace Ambit.AppCore.Models
 	public interface ICartService
 	{
 		bool DeleteCart(long id);
-		ObjectResult AddCartItems(CartItemEntityModel CartItemEntity);
+		ObjectResult AddCartItems(CartItemRequest CartItemEntity);
 		ObjectResult GetCustomerCartDetailsById();
-		ObjectResult UpsertCart(CartItemEntityModel cartItemEntityModel);
+		ObjectResult UpsertCart(CartItemRequest cartItemEntityModel);
 	}
 }

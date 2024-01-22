@@ -5,8 +5,9 @@ namespace Ambit.Domain.Entities
 	public class cart : BaseEntity
 	{
 		[Key]
-		public int cartid { get; set; }
+		public long cartid { get; set; }
 		public string customername { get; set; }
 		public int customerloginid { get; set; }
+		public int customerid { get; set; }
 	}
 }

@@ -8,6 +8,7 @@ namespace Ambit.AppCore.EntityModels
 		public int cartid { get; set; }
 		public string customername { get; set; }
 		public int customerloginid { get; set; }
+		public int customerid { get; set; }
 		public virtual IEnumerable<CartItemEntityModel> CartItems { get; set; }
 	}
 }

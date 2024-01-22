@@ -189,7 +189,7 @@ namespace Ambit.Infrastructure.Persistence.Repositories
 				.Sum(s => s.cartid);
 			return totalAmount;
 		}
-		public int IsCartExist(int customerloginid)
+		public long IsCartExist(int customerloginid)
 		{
 			try
 			{

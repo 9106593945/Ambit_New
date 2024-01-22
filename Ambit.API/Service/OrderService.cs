@@ -1,20 +1,27 @@
 ﻿using Ambit.API.Helpers;
 using Ambit.AppCore.Common;
 using Ambit.AppCore.EntityModels;
+using Ambit.AppCore.Models;
 using Ambit.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Security.Claims;
 
 namespace Ambit.Services
 {
 	public class OrderService : IOrderService
 	{
 		private readonly AppSettings _appSettings;
+		private readonly HttpContext _context;
 		private readonly IRepoSupervisor _repoSupervisor;
-		public OrderService(IOptions<AppSettings> appSettings, IRepoSupervisor repoSupervisor)
+		public OrderService(IOptions<AppSettings> appSettings, 
+			IRepoSupervisor repoSupervisor,
+			IHttpContextAccessor httpContextAccessor
+			)
 		{
 			_appSettings = appSettings.Value;
 			_repoSupervisor = repoSupervisor;
+			_context = httpContextAccessor.HttpContext;
 		}
 
 		public bool DeleteCart(long id)
@@ -117,6 +124,7 @@ namespace Ambit.Services
 
 		public ObjectResult GetCustomerCartDetailsById()
 		{
+			int customerId = Convert.ToInt32(_context.User.Claims.First(s => s.Type == ClaimTypes.Sid).Value);
 			return Utils.GetObjectResult(200, new CommonAPIReponse<List<CartItemEntityModel>>
 			{
 				Data = _repoSupervisor.Cart.GetCartDetailsByCustomerLoginId(customerId),
@@ -180,7 +188,7 @@ namespace Ambit.Services
 				});
 			}
 		}
-		private int IsCartExist(int customerloginid)
+		private long IsCartExist(int customerloginid)
 		{
 			return _repoSupervisor.Cart.IsCartExist(customerloginid);
 		}

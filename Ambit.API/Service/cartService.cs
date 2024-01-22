@@ -5,16 +5,19 @@ using Ambit.AppCore.Models;
 using Ambit.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Security.Claims;
 
 namespace Ambit.Services
 {
 	public class CartService : ICartService
 	{
-		private readonly AppSettings _appSettings;
 		private readonly IRepoSupervisor _repoSupervisor;
-		public CartService(IOptions<AppSettings> appSettings, IRepoSupervisor repoSupervisor)
+		private readonly HttpContext _context;
+
+		public CartService(IOptions<AppSettings> appSettings, IRepoSupervisor repoSupervisor,
+						IHttpContextAccessor httpContextAccessor)
 		{
-			_appSettings = appSettings.Value;
+			_context = httpContextAccessor.HttpContext;
 			_repoSupervisor = repoSupervisor;
 		}
 
@@ -25,11 +28,24 @@ namespace Ambit.Services
 			return true;
 		}
 
-		public ObjectResult AddCartItems(CartItemEntityModel CartItemEntity)
+		public ObjectResult AddCartItems(CartItemRequest request)
 		{
 			try
 			{
-				var CartItems = _repoSupervisor.Cart.AddCartItems(CartItemEntity);
+				var CartItems = _repoSupervisor.Cart.AddCartItems(new CartItemEntityModel
+				{
+					Active = true,
+					CartId = request.CartId,
+					CustomerLoginId = request.CustomerLoginId,
+					ItemId = request.ItemId,
+					Quantity = request.Quantity,
+					Created_By = 1,
+					Created_On = DateTime.UtcNow,
+					Id = request.Id,
+					IsDeleted = false,
+					Updated_By = 1,
+					Updated_On = DateTime.UtcNow
+				});
 				if (CartItems != null)
 				{
 					_repoSupervisor.Complete();
@@ -118,6 +134,8 @@ namespace Ambit.Services
 
 		public ObjectResult GetCustomerCartDetailsById()
 		{
+			int customerId = Convert.ToInt32(_context.User.Claims.First(s => s.Type == ClaimTypes.Sid).Value);
+
 			return Utils.GetObjectResult(200, new CommonAPIReponse<List<CartItemEntityModel>>
 			{
 				Data = _repoSupervisor.Cart.GetCartDetailsByCustomerLoginId(customerId),
@@ -125,15 +143,29 @@ namespace Ambit.Services
 			});
 		}
 
-		public ObjectResult UpsertCart(CartItemEntityModel cartItemEntityModel)
+		public ObjectResult UpsertCart(CartItemRequest request)
 		{
 			try
 			{
-				var cartId = IsCartExist(cartItemEntityModel.CustomerLoginId);
+				var cartId = IsCartExist(request.CustomerLoginId);
 				if (cartId > 0)
 				{
-					cartItemEntityModel.CartId = cartId;
-					var CartItems = _repoSupervisor.Cart.AddCartItems(cartItemEntityModel);
+					request.CartId = cartId;
+					var CartItems = _repoSupervisor.Cart.AddCartItems(new CartItemEntityModel
+					{
+						Active = true,
+						CartId = request.CartId,
+						CustomerLoginId = request.CustomerLoginId,
+						CustomerId = 1,
+						ItemId = request.ItemId,
+						Quantity = request.Quantity,
+						Created_By = 1,
+						Created_On = DateTime.UtcNow,
+						Id = request.Id,
+						IsDeleted = false,
+						Updated_By = 1,
+						Updated_On = DateTime.UtcNow
+					});
 					if (CartItems != null)
 					{
 						_repoSupervisor.Complete();
@@ -148,13 +180,27 @@ namespace Ambit.Services
 				{
 					CartEntityModel cartEntityModel = new()
 					{
-						customerloginid = cartItemEntityModel.CustomerLoginId
+						customerloginid = request.CustomerLoginId
 					};
 					var cart = _repoSupervisor.Cart.AddNewCart(cartEntityModel);
 					_repoSupervisor.Complete();
 					if (cart != null)
-						cartItemEntityModel.CartId = cart.Entity.cartid;
-					var CartItems = _repoSupervisor.Cart.AddCartItems(cartItemEntityModel);
+						request.CartId = cart.Entity.cartid;
+					var CartItems = _repoSupervisor.Cart.AddCartItems(new CartItemEntityModel
+					{
+						Active = true,
+						CartId = request.CartId,
+						CustomerLoginId = request.CustomerLoginId,
+						ItemId = request.ItemId,
+						CustomerId = 1,
+						Quantity = request.Quantity,
+						Created_By = 1,
+						Created_On = DateTime.UtcNow,
+						Id = request.Id,
+						IsDeleted = false,
+						Updated_By = 1,
+						Updated_On = DateTime.UtcNow
+					});
 					if (CartItems != null)
 					{
 						_repoSupervisor.Complete();
@@ -181,7 +227,7 @@ namespace Ambit.Services
 				});
 			}
 		}
-		private int IsCartExist(int customerloginid)
+		private long IsCartExist(int customerloginid)
 		{
 			return _repoSupervisor.Cart.IsCartExist(customerloginid);
 		}
