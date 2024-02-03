@@ -14,7 +14,7 @@ namespace Ambit.Services
 		private readonly AppSettings _appSettings;
 		private readonly HttpContext _context;
 		private readonly IRepoSupervisor _repoSupervisor;
-		public OrderService(IOptions<AppSettings> appSettings, 
+		public OrderService(IOptions<AppSettings> appSettings,
 			IRepoSupervisor repoSupervisor,
 			IHttpContextAccessor httpContextAccessor
 			)
@@ -35,7 +35,7 @@ namespace Ambit.Services
 		{
 			try
 			{
-				var CartItems = _repoSupervisor.Cart.AddCartItems(CartItemEntity);
+				var CartItems = _repoSupervisor.Order.AddCartItems(CartItemEntity);
 				if (CartItems != null)
 				{
 					_repoSupervisor.Complete();
@@ -66,7 +66,7 @@ namespace Ambit.Services
 		{
 			try
 			{
-				if (_repoSupervisor.Cart.UpdateCartItems(CartItemEntity))
+				if (_repoSupervisor.Order.UpdateCartItems(CartItemEntity))
 				{
 					_repoSupervisor.Complete();
 					return Utils.GetObjectResult(200, new CommonAPIReponse<string>
@@ -96,7 +96,7 @@ namespace Ambit.Services
 		{
 			try
 			{
-				if (_repoSupervisor.Cart.DeleteCartItems(id))
+				if (_repoSupervisor.Order.DeleteCartItems(id))
 				{
 					_repoSupervisor.Complete();
 					return Utils.GetObjectResult(200, new CommonAPIReponse<string>
@@ -127,7 +127,7 @@ namespace Ambit.Services
 			int customerId = Convert.ToInt32(_context.User.Claims.First(s => s.Type == ClaimTypes.Sid).Value);
 			return Utils.GetObjectResult(200, new CommonAPIReponse<List<CartItemEntityModel>>
 			{
-				Data = _repoSupervisor.Cart.GetCartDetailsByCustomerLoginId(customerId),
+				Data = _repoSupervisor.Order.GetCartDetailsByCustomerLoginId(customerId),
 				Status = 200
 			});
 		}
@@ -140,7 +140,7 @@ namespace Ambit.Services
 				if (cartId > 0)
 				{
 					cartItemEntityModel.CartId = cartId;
-					var CartItems = _repoSupervisor.Cart.AddCartItems(cartItemEntityModel);
+					var CartItems = _repoSupervisor.Order.AddCartItems(cartItemEntityModel);
 					if (CartItems != null)
 					{
 						_repoSupervisor.Complete();
@@ -157,7 +157,7 @@ namespace Ambit.Services
 					{
 						customerloginid = cartItemEntityModel.CustomerLoginId
 					};
-					var cart = _repoSupervisor.Cart.AddNewCart(cartEntityModel);
+					var cart = _repoSupervisor.Order.AddNewCart(cartEntityModel);
 					_repoSupervisor.Complete();
 					if (cart != null)
 						cartItemEntityModel.CartId = cart.Entity.cartid;
@@ -190,7 +190,7 @@ namespace Ambit.Services
 		}
 		private long IsCartExist(int customerloginid)
 		{
-			return _repoSupervisor.Cart.IsCartExist(customerloginid);
+			return _repoSupervisor.Order.IsCartExist(customerloginid);
 		}
 	}
 }
